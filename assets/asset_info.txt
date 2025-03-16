@@ -1,0 +1,4 @@
+This folder is home to any images used in this project.
+currently home to:
+
+-  banner.png - a test image used to test image functionality in the PySimpleGUI module.
