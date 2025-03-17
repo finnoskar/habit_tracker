@@ -1,5 +1,5 @@
 """
-Yo Python App: Habit Tracker
+Python App: Habit Tracker
 
 INPUT: commit habits, note that you have completed habit
 PROCESS: commits habits to rawtext saved in data.txt, so they save between sessions
