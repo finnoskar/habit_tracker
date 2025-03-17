@@ -1,5 +1,5 @@
 """
-Page used to store Habits class
+Page used to store 'Habits' class
 Supports main.py
 """
 import PySimpleGUI as sg
