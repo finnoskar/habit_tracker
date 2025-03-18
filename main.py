@@ -27,7 +27,7 @@ def main():
         elif event == '-HABIT LIST-':# If an element is selected in the Habit List
             print(values["-HABIT LIST-"])
             print(type(values["-HABIT LIST-"]))
-            if values['-HABIT LIST-']:# if values[habit list] are not '' (if there is anything selected)
+            if isinstance(values['-HABIT LIST-'], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
                 selected_habit = values['-HABIT LIST-'][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
         elif event == '-ADD HABIT-':# If you want to add a habit
             habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict
