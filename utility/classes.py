@@ -35,18 +35,21 @@ class Habits:
         else: 
             sg.popup(f'Habit "{new_habit}" already in system. Edit habit data to change existing ')
     
-    def update_habit(self, habit, new_habit_name=None, desc=None):# update the stuff about a habit
-            updated_name = self.habit_dict[habit] # updated name is normal
+    def update_habit(self, habit, new_habit_name, desc):# update the stuff about a habit
             updated_desc = self.habit_dict[habit][0] # updated description is the old
             count = self.habit_dict[habit][1] # keep the count the same, because otherwise this can be farmed.
             prevdate = self.habit_dict[habit][2] # prevdate is same, because I'm not letting people exploit this
-            if new_habit_name:# If the user wants to change habit name
-                updated_name = new_habit_name
-            if desc:# If user wants to change description
-                updated_desc = desc
+            if len(new_habit_name) < 4:
+                sg.popup(f'Habit name "{new_habit_name}" too short. \nMust have 4-25 characters', keep_on_top=True)
+                return habit
+            if len(new_habit_name) > 25:
+                sg.popup(f'Habit name "{new_habit_name}" too long. \nMust have 4-25 characters', keep_on_top=True)
+                return habit
+            new_habit_name = new_habit_name.strip()
+            desc = desc.strip()
             self.habit_dict.pop(habit) # remove the old habit
-            self.habit_dict[updated_name] = [updated_desc, count, prevdate] # fill into habit_dict as in {habit: [desc, count, prevdate]}
-            return updated_name # Return the new name so selected_habit works
+            self.habit_dict[new_habit_name] = [desc, count, prevdate] # fill into habit_dict as in {habit: [desc, count, prevdate]}
+            return new_habit_name # Return the new name so selected_habit works
                 
     def inc_habit(self, habit):# Increment the usage of a habit
         habit = habit.lower().strip()
