@@ -38,19 +38,21 @@ class Habits:
     def update_habit(self, habit, new_habit_name, desc):# update the stuff about a habit
             count = self.habit_dict[habit][1] # keep the count the same, because otherwise this can be farmed.
             prevdate = self.habit_dict[habit][2] # prevdate is same, because I'm not letting people exploit this
-            if len(new_habit_name) < 4:
+            if len(new_habit_name) < 4:# If the name is too short
                 sg.popup(f'Habit name "{new_habit_name}" too short. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
-            if len(new_habit_name) > 25:
+            if len(new_habit_name) > 25:# If the name is too long
                 sg.popup(f'Habit name "{new_habit_name}" too long. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
+            print('3456 is this firing at all?')
             if re.match(self.UNACCEPTED_CHARS, new_habit_name):# If the regex of unaccepted characters matches the habit_name
+                print('is this firing at all?')
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit_name)# get a list of those characters
                 list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
                 unaccepted_chars_message = 'Uh oh! Your habit name contains unsupported characters!\nThe characters in question are:\n' # base error message for unaccepted chars
                 unaccepted_chars_message += list_of_unaccepted_chars.pop(0) # remove the first item of the unaccepted chars and add to the message: this is to ensure char, char, char, not , char, char, char
                 for char in list_of_unaccepted_chars:
-                    unaccepted_chars_message += ', ' + char# add every other char to the list as ', char'
+                    unaccepted_chars_message += ', ' + char# add every other character to the list as ', <char>'
                 sg.popup(unaccepted_chars_message, keep_on_top=True)
                 return habit
             new_habit_name = new_habit_name.strip()
