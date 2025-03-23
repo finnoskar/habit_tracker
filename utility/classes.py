@@ -45,6 +45,15 @@ class Habits:
             if len(new_habit_name) > 25:
                 sg.popup(f'Habit name "{new_habit_name}" too long. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
+            if re.match(self.UNACCEPTED_CHARS, new_habit_name):# If the regex of unaccepted characters matches the habit_name
+                list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit_name)# get a list of those characters
+                list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
+                unaccepted_chars_message = 'Uh oh! Your habit name contains unsupported characters!\nThe characters in question are:\n' # base error message for unaccepted chars
+                unaccepted_chars_message += list_of_unaccepted_chars.pop(0) # remove the first item of the unaccepted chars and add to the message: this is to ensure char, char, char, not , char, char, char
+                for char in list_of_unaccepted_chars:
+                    unaccepted_chars_message += ', ' + char# add every other char to the list as ', char'
+                sg.popup(unaccepted_chars_message, keep_on_top=True)
+                return habit
             new_habit_name = new_habit_name.strip()
             desc = desc.strip()
             self.habit_dict.pop(habit) # remove the old habit
