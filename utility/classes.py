@@ -36,7 +36,6 @@ class Habits:
             sg.popup(f'Habit "{new_habit}" already in system. Edit habit data to change existing ')
     
     def update_habit(self, habit, new_habit_name, desc):# update the stuff about a habit
-            updated_desc = self.habit_dict[habit][0] # updated description is the old
             count = self.habit_dict[habit][1] # keep the count the same, because otherwise this can be farmed.
             prevdate = self.habit_dict[habit][2] # prevdate is same, because I'm not letting people exploit this
             if len(new_habit_name) < 4:
