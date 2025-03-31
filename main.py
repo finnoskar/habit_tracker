@@ -28,7 +28,11 @@ def main():
             if isinstance(values['-HABIT LIST-'], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
                 selected_habit = values['-HABIT LIST-'][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
         elif event == '-ADD HABIT-':# If you want to add a habit
-            habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict
+            add_habit_error = habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict and save the error that is thrown by the function as add_habit_error
+            print('error:', add_habit_error)
+            if not add_habit_error: # If no error was thrown
+                window['-ADD HABIT NAME-'].update('')
+                window['-ADD DESC-'].update('')
         elif event == '-EDIT HABIT-':
             if selected_habit == 'No Habit Selected':
                 sg.popup('No Habit Selected. \nSelect a habit to edit!', keep_on_top=True)
@@ -51,11 +55,14 @@ def main():
                     habit_data.inc_habit(selected_habit)
                     habit_data.habit_dict[selected_habit][2] = datetime.date.today()
                 else:
-                    sg.popup('YOu have already marked this habit as done today! \nWait till tomorrow to increase your streak and gain more points!', keep_on_top=True)
+                    sg.popup('Yuu have already marked this habit as done today! \nWait till tomorrow to increase your streak and gain more points!', keep_on_top=True)
         elif event == '-DEL HABIT-':
             if selected_habit != 'No Habit Selected':
                 habit_data.del_habit(selected_habit)
                 selected_habit = 'No Habit Selected'
+                window['-EDIT HABIT NAME-'].update('')
+                window['-EDIT DESC-'].update('')
+                window['-EDITING COLUMN-'].update(visible=False)
             else:
                 sg.popup('Select a habit to delete', keep_on_top=True)
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
