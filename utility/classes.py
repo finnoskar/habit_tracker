@@ -22,7 +22,7 @@ class Habits:
         elif len(new_habit) > 25: # Habit name too long (>15 characters)
             sg.popup(f'Habit {new_habit} too long. \nMust have 4-25 characters', keep_on_top=True)
         elif new_habit not in self.habit_dict.keys():# If it is not present in the habit_dict
-            if re.match(self.UNACCEPTED_CHARS, new_habit):# If the regex of unaccepted characters matches the habit_name
+            if re.search(self.UNACCEPTED_CHARS, new_habit):# If the regex of unaccepted characters matches the habit_name
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit)# get a list of those characters
                 list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
                 unaccepted_chars_message = 'Uh oh! Your habit name contains unsupported characters!\nThe characters in question are:\n' # base error message for unaccepted chars
@@ -45,7 +45,7 @@ class Habits:
                 sg.popup(f'Habit name "{new_habit_name}" too long. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
             print('3456 is this firing at all?')
-            if re.match(self.UNACCEPTED_CHARS, new_habit_name):# If the regex of unaccepted characters matches the habit_name
+            if re.search(self.UNACCEPTED_CHARS, new_habit_name):# If the regex of unaccepted characters matches the habit_name
                 print('is this firing at all?')
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit_name)# get a list of those characters
                 list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list

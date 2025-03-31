@@ -54,7 +54,7 @@ def build_win(habit_dict):# Build the Window initially
     window - The Window object that the user interacts with
     """
     WIN_HEIGHT = 450
-    WIN_LENGTH = 1100
+    WIN_LENGTH = 1200
     column1 = [
         [sg.Text('Add Habit', font=('Calibri', 16))],
         [sg.Input(size=(28, 1), key='-ADD HABIT NAME-'), sg.Button('Add Habit', enable_events=True, font=('Calibri', 12), key='-ADD HABIT-')],
