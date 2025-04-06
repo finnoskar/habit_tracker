@@ -50,9 +50,7 @@ class Habits:
             if len(new_habit_name) > 25:# If the name is too long
                 sg.popup(f'Habit name "{new_habit_name}" too long. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
-            print('3456 is this firing at all?')
             if re.search(self.UNACCEPTED_CHARS, new_habit_name + desc):# If the regex of unaccepted characters matches the habit_name or the description
-                print('is this firing at all?')
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit_name + desc)# get a list of those characters
                 list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
                 unaccepted_chars_message = 'Uh oh! Your habit name and/or description contains unsupported characters!\nThe characters in question are:\n' # base error message for unaccepted chars
@@ -92,11 +90,7 @@ class Habits:
         habit = habit.lower().strip()
         self.habit_dict.pop(habit)
 
-    
-    def search_habits(self, term):# Search habits
-        for key in self.habit_dict.keys():
-            pass
-        
+
     def print_habits(self):# print to the user all of the habits
         print('All habits logged: ')
         for key in self.habit_dict:

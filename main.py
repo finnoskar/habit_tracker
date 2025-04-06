@@ -67,8 +67,6 @@ def main():
                 sg.popup('Select a habit to delete', keep_on_top=True)
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
     
-    habit_data.print_habits()
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt
-    print('All Done') #check everything's done in console
 
 main()

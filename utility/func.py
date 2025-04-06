@@ -55,28 +55,34 @@ def build_win(habit_dict):# Build the Window initially
     """
     WIN_HEIGHT = 450
     WIN_LENGTH = 1200
+
+    H1_FONT = ('Calibri', 24, 'bold')
+    H2_FONT = ('Calibri', 20)
+    H3_FONT = ('Calibri', 16)
+    BUTTON_FONT = ('Calibri', 12)
+    DEFAULT_FONT = ('Calibri', 9)
     column1 = [
-        [sg.Text('Add Habit', font=('Calibri', 16))],
-        [sg.Input(size=(28, 1), key='-ADD HABIT NAME-'), sg.Button('Add Habit', enable_events=True, font=('Calibri', 12), key='-ADD HABIT-')],
-        [sg.Multiline(size=(10, 20), key='-ADD DESC-')]
+        [sg.Text('Add Habit', font=H3_FONT)],
+        [sg.Input(size=(28, 1), font=DEFAULT_FONT, key='-ADD HABIT NAME-'), sg.Button('Add Habit', enable_events=True, font=BUTTON_FONT, key='-ADD HABIT-')],
+        [sg.Multiline(size=(10, 20), font=DEFAULT_FONT, key='-ADD DESC-')]
     ]
     column2 = [
-        [sg.Text('View Habits', font=('Calibri', 16))],
-        [sg.Listbox(enable_events=True, values=habit_dict.keys(), select_mode="LISTBOX_SELECT_MODE_SINGLE", size=(20, 20), key='-HABIT LIST-')]
+        [sg.Text('View Habits', font=H3_FONT)],
+        [sg.Listbox(enable_events=True, values=habit_dict.keys(), select_mode="LISTBOX_SELECT_MODE_SINGLE", size=(20, 20), font=DEFAULT_FONT, key='-HABIT LIST-')]
     ]
     column3 = [
-        [sg.Text('Selected Habit', font=('Calibri', 16)), sg.Button('Edit Habit', enable_events=True, font=('Calibri', 12), key='-EDIT HABIT-')],
-        [sg.Frame('Habit', layout=[[sg.Text('No Habit Selected', key='-VIEW HABIT NAME-')]]), sg.Button('Delete', font=('Calibri', 12), enable_events= True, key='-DEL HABIT-')],
-        [sg.Frame('Streak', layout=[[sg.Text('No Habit Selected', key='-VIEW STREAK-'), sg.Button('+Streak', enable_events=True, font=('Calibri', 12), key='-INC STREAK-')]])],
-        [sg.Frame('Habit Description', layout=[[sg.Text('No Habit Selected', size=(30, 10), key='-VIEW DESC-')]])]
+        [sg.Text('Selected Habit', font=H3_FONT), sg.Button('Edit Habit', enable_events=True, font=BUTTON_FONT, key='-EDIT HABIT-')],
+        [sg.Frame('Habit', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, key='-VIEW HABIT NAME-')]]), sg.Button('Delete', font=BUTTON_FONT, enable_events= True, key='-DEL HABIT-')],
+        [sg.Frame('Streak', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, key='-VIEW STREAK-'), sg.Button('+Streak', enable_events=True, font=BUTTON_FONT, key='-INC STREAK-')]])],
+        [sg.Frame('Habit Description', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, size=(30, 10), key='-VIEW DESC-')]])]
     ]
     editing_column = [
-        [sg.Text('Edit Habit', font=('Calibri', 16))],
-        [sg.Input(size=(28, 1), key='-EDIT HABIT NAME-'), sg.Button('UPDATE HABIT', enable_events=True, font=('Calibri', 12), key='-UPDATE HABIT-')],
-        [sg.Multiline(size=(10, 20), key='-EDIT DESC-')]
+        [sg.Text('Edit Habit', font=H3_FONT)],
+        [sg.Input(size=(28, 1), font=DEFAULT_FONT, key='-EDIT HABIT NAME-'), sg.Button('UPDATE HABIT', enable_events=True, font=BUTTON_FONT, key='-UPDATE HABIT-')],
+        [sg.Multiline(size=(10, 20), font=DEFAULT_FONT, key='-EDIT DESC-')]
     ]
     top_bar = [
-        [sg.Text("Finn-Oskar's Habit Tracker App", pad=((50, 75), (20, 10)), font=("Calibri", 21)), sg.Image(filename='./assets/banner.png', pad=((50, 75), (20, 10)))]
+        [sg.Text("Finn-Oskar's Habit Tracker App", pad=((50, 75), (20, 10)), font=H1_FONT), sg.Image(filename='./assets/banner.png', pad=((50, 75), (20, 10)))]
     ]
     layout = [
         [
