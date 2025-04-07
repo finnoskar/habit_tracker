@@ -15,7 +15,7 @@ import re
 
 def main():
     """The Main Process Function"""
-    sg.ChangeLookAndFeel('LightGrey3')
+    sg.ChangeLookAndFeel('LightBlue3')
     habit_data = Habits() # Instantiate habit_data
     func.load_habits(habit_data.habit_dict)# Load tasks from file, save into habit_data.habit_dict
     window = func.build_win(habit_data.habit_dict) # Build and return the Window object (GUI)
@@ -70,5 +70,3 @@ def main():
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt
 
 main()
-print(sg.Text.fonts_installed_list())
-print(sg.theme_list())
