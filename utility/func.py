@@ -116,7 +116,8 @@ def update_win(window, habit_dict, selected_habit):
     else:
         window['-VIEW DESC-'].update('No Habit Selected')
         window['-VIEW STREAK-'].update('No Habit Selected')
-    
+
+
 def save_habits(habit_dict):# save all tasks as rawtext to data.txt params: habit_dict is Habits.habit_dict, 
     """
     Loads the habit data from the habit_dict and writes them to data.txt in format:
