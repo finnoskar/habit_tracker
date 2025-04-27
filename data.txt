@@ -1,3 +1,5 @@
 hellos>>^^1^^2025-04-02
 eeeee>>^^0^^None
 here's johnny!>>^^1^^2025-04-02
+
+obj {key: value, key2: value}>>^^0^^None
