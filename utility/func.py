@@ -86,13 +86,13 @@ def build_win(habit_dict):# Build the Window initially
     ]
     layout = [
         [
-            sg.Column(top_bar, element_justification='c')
+            sg.pin(sg.Column(top_bar, element_justification='c'))
         ],
         [
             sg.HSeparator()
         ],
         [
-            sg.Column(column1), sg.VSeparator(), sg.Column(column2), sg.VSeparator(), sg.Column(column3), sg.VSeparator(), sg.Column(editing_column, visible=False, key='-EDITING COLUMN-')
+            sg.pin(sg.Column(column1)), sg.pin(sg.VSeparator()), sg.pin(sg.Column(column2)), sg.pin(sg.VSeparator()), sg.pin(sg.Column(column3)), sg.pin(sg.VSeparator()), sg.pin(sg.Column(editing_column, visible=False, key='-EDITING COLUMN-'))
         ]
     ]
     return sg.Window('Habit Tracker', layout, size=(WIN_LENGTH, WIN_HEIGHT))
