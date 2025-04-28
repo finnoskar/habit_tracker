@@ -38,10 +38,12 @@ def main():
                 sg.popup('No Habit Selected. \nSelect a habit to edit!', keep_on_top=True)
             else:
                 window['-EDITING COLUMN-'].update(visible=True)
+                window['-SELECTED HABIT COLUMN-'].update(visible=False)
                 window['-EDIT HABIT NAME-'].update(selected_habit)
                 window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
         elif event == '-UPDATE HABIT-':
             window['-EDITING COLUMN-'].update(visible=False)
+            window['-SELECTED HABIT COLUMN-'].update(visible=True)
             selected_habit = habit_data.update_habit(selected_habit, values['-EDIT HABIT NAME-'], values['-EDIT DESC-']) # Change selected_habit to teh new name
         elif event == '-INC STREAK-':
             if selected_habit == 'No Habit Selected':
