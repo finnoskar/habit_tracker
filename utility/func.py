@@ -65,46 +65,119 @@ def build_win(habit_dict):# Build the Window initially
     habit_menu = [
         '⋮', ['&Delete', '&Edit', '&Clear Streak']
     ]
-    column1 = [
-        [sg.Text('Add Habit', font=H3_FONT), sg.Push(), sg.Button('Add Habit', enable_events=True, font=BUTTON_FONT, key='-ADD HABIT-')],
+    column1 = sg.Column([
+        [
+            sg.Text('Add Habit', font=H3_FONT), 
+            sg.Push(), 
+            sg.Button('Add Habit', enable_events=True, font=BUTTON_FONT, key='-ADD HABIT-')
+        ],
         [sg.Input(size=(35, 1), font=DEFAULT_FONT, key='-ADD HABIT NAME-')],
         [sg.Multiline(size=(33, 20), font=DEFAULT_FONT, key='-ADD DESC-')]
-    ]
-    column2 = [
+    ])
+
+    column2 = sg.Column([
         [sg.Text('View Habits', font=H3_FONT)],
         [sg.Listbox(enable_events=True, values=habit_dict.keys(), select_mode="LISTBOX_SELECT_MODE_SINGLE", size=(20, 20), font=DEFAULT_FONT, key='-HABIT LIST-')]
-    ]
+    ])
 
-    selected_column = [
-        [sg.Text('Selected Habit', font=H3_FONT), sg.Push(), sg.ButtonMenu('⋮', habit_menu, font=BUTTON_FONT, button_color=('#000000', '#A8CFDD'), border_width=0, key='-HABIT OPTIONS-')],
-        [sg.Frame('Habit', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, size=28, key='-VIEW HABIT NAME-')]])],
+    selected_column = sg.Column([
+        [
+            sg.Text('Selected Habit', font=H3_FONT), 
+            sg.Push(), sg.ButtonMenu('⋮', habit_menu, font=BUTTON_FONT, button_color=('#000000', '#A8CFDD'), border_width=0, key='-HABIT OPTIONS-')
+        ],
+        [sg.Frame('Habit', 
+                  layout=[[sg.Text('No Habit Selected', 
+                                   font=DEFAULT_FONT, 
+                                   size=28, 
+                                   key='-VIEW HABIT NAME-')]]
+                 )],
+
         [sg.Frame('Habit Description', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, size=(28, 20), key='-VIEW DESC-')]])]
-    ]
-    streak_column = [
-        [sg.Button('Mark as Done', enable_events=True, size=20, font=BUTTON_FONT, key='-INC STREAK-')],
-        [sg.Frame('Streak', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, size=700, key='-VIEW STREAK-')]])],
-        [sg.Frame('Good Work Bit', layout=[[sg.Text('Yup', font=H3_FONT)]], size=(300, 700))],
-    ]
-    editing_column = [
-        [sg.Text('Edit Habit', font=H3_FONT), sg.Push(), sg.Button('Update Habit', enable_events=True, font=BUTTON_FONT, key='-UPDATE HABIT-')],
-        [sg.Input(size=(35, 1), font=DEFAULT_FONT, key='-EDIT HABIT NAME-')],
-        [sg.Multiline(size=(33, 20), font=DEFAULT_FONT, key='-EDIT DESC-')]
-    ]
-    top_bar = [
-        [sg.Text("StreakIt", font=H1_FONT, background_color='black'), sg.Text('A HABIT TRACKING APP', pad=(50, 0), font=H4_FONT), sg.Push(background_color='orange'), sg.Column([[sg.Button('HOME', disabled=True, pad=(20, 0), key='-HOME-'), sg.Button('OPTIONS', disabled=False, pad=(20, 0), key='-OPTIONS-')]], background_color='green')]
-    ]
+    ])
+
+    streak_column = sg.Column([
+        [sg.Button('Mark as Done', 
+                   enable_events=True, 
+                   size=20, 
+                   font=BUTTON_FONT, 
+                   key='-INC STREAK-')],
+        [sg.Frame('Streak', 
+                  layout=[[sg.Text('No Habit Selected', 
+                                   font=DEFAULT_FONT, 
+                                   size=700, 
+                                   key='-VIEW STREAK-')]]
+                 )],
+        [sg.Frame('Good Work Bit', 
+                  layout=[[sg.Text('Yup', 
+                                   font=H3_FONT)]], 
+                  size=(300, 700))],
+    ])
+
+    editing_column = sg.Column([
+        [
+            sg.Text('Edit Habit', 
+                    font=H3_FONT), 
+            sg.Push(), 
+            sg.Button('Update Habit', 
+                      enable_events=True, 
+                      font=BUTTON_FONT, 
+                      key='-UPDATE HABIT-')
+        ],
+        [sg.Input(size=(35, 1), 
+                  font=DEFAULT_FONT, 
+                  key='-EDIT HABIT NAME-')],
+
+        [sg.Multiline(size=(33, 20), 
+                      font=DEFAULT_FONT, 
+                      key='-EDIT DESC-')]
+
+    ], visible=False, key='-EDITING COLUMN-')
+
+    top_bar = sg.Column([
+        [
+            sg.Text("StreakIt", 
+                    font=H1_FONT, 
+                    background_color='black'), 
+
+            sg.Text('A HABIT TRACKING APP', 
+                    pad=(50, 0), 
+                    font=H4_FONT), 
+
+            sg.Push(background_color='orange'), 
+
+            sg.Button('HOME', 
+                      disabled=True, 
+                      pad=(20, 0), 
+                      key='-HOME-'), 
+                      
+            sg.Button('OPTIONS', 
+                      disabled=False, 
+                      pad=(20, 0), 
+                      key='-OPTIONS-')
+        ]
+    ], expand_x=True, background_color='gray')
+
     layout = [
+        [sg.pin(top_bar)],
+        [sg.HSeparator()]
         [
-            sg.pin(sg.Column(top_bar, element_justification='c'))
-        ],
-        [
-            sg.HSeparator()
-        ],
-        [
-            sg.pin(sg.Column(layout=[[sg.pin(sg.Column(column1)), sg.VSeparator(), sg.pin(sg.Column(column2)), sg.VSeparator(), sg.pin(sg.Column(layout=[[sg.Column(selected_column), sg.Column(streak_column)]], key='-SELECTED HABIT COLUMN-')), sg.pin(sg.Column(editing_column, visible=False, key='-EDITING COLUMN-')), sg.VSeparator()]]))
+            sg.pin(sg.Column(layout=[
+                [
+                    sg.pin(column1), 
+                    sg.VSeparator(), 
+                    sg.pin(column2), 
+                    sg.VSeparator(), 
+                    sg.pin(sg.Column(layout=[[selected_column, streak_column]], 
+                                     key='-SELECTED HABIT COLUMN-')), 
+                    sg.pin(editing_column), 
+                    sg.VSeparator()
+                ]]))
         ]
     ]
-    return sg.Window('Habit Tracker', layout, border_depth=1, size=(WIN_LENGTH, WIN_HEIGHT))
+    return sg.Window('Habit Tracker', 
+                     layout, border_depth=1, 
+                     finalize=True, 
+                     size=(WIN_LENGTH, WIN_HEIGHT))
 
 def update_win(window, habit_dict, selected_habit):
     """
