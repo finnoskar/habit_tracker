@@ -25,14 +25,34 @@ def main():
         if event == sg.WIN_CLOSED:# If the window is closed, break the loop
             break
         elif event == '-HABIT LIST-':# If an element is selected in the Habit List
-            if isinstance(values['-HABIT LIST-'], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
-                selected_habit = values['-HABIT LIST-'][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
+            if isinstance(values[event], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
+                selected_habit = values[event][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
         elif event == '-ADD HABIT-':# If you want to add a habit
             add_habit_error = habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict and save the error that is thrown by the function as add_habit_error
             print('error:', add_habit_error)
             if not add_habit_error: # If no error was thrown
                 window['-ADD HABIT NAME-'].update('')
                 window['-ADD DESC-'].update('')
+        elif event == '-HABIT OPTIONS-':
+            if values[event] == 'Edit':
+                if selected_habit == 'No Habit Selected':
+                    sg.popup('No Habit Selected. \nSelect a habit to edit!', keep_on_top=True)
+                else:
+                    window['-EDITING COLUMN-'].update(visible=True)
+                    window['-SELECTED HABIT COLUMN-'].update(visible=False)
+                    window['-EDIT HABIT NAME-'].update(selected_habit)
+                    window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
+            if values[event] == 'Delete':
+                if selected_habit != 'No Habit Selected':
+                    habit_data.del_habit(selected_habit)
+                    selected_habit = 'No Habit Selected'
+                    window['-EDIT HABIT NAME-'].update('')
+                    window['-EDIT DESC-'].update('')
+                    window['-EDITING COLUMN-'].update(visible=False)
+                else:
+                    sg.popup('Select a habit to delete', keep_on_top=True)
+            if values[event] == 'Clear Streak':
+                pass
         elif event == '-EDIT HABIT-':
             if selected_habit == 'No Habit Selected':
                 sg.popup('No Habit Selected. \nSelect a habit to edit!', keep_on_top=True)
