@@ -67,23 +67,44 @@ def build_win(habit_dict):# Build the Window initially
     ]
     column1 = sg.Column([
         [
-            sg.Text('Add Habit', font=H3_FONT), 
+            sg.Text('Add Habit', 
+                    font=H3_FONT), 
             sg.Push(), 
-            sg.Button('Add Habit', enable_events=True, font=BUTTON_FONT, key='-ADD HABIT-')
+            sg.Button('Add Habit', 
+                      enable_events=True, 
+                      font=BUTTON_FONT, 
+                      key='-ADD HABIT-')
         ],
-        [sg.Input(size=(35, 1), font=DEFAULT_FONT, key='-ADD HABIT NAME-')],
-        [sg.Multiline(size=(33, 20), font=DEFAULT_FONT, key='-ADD DESC-')]
+        [sg.Input(size=(35, 1), 
+                  font=DEFAULT_FONT, 
+                  key='-ADD HABIT NAME-')],
+        [sg.Multiline(size=(33, 20), 
+                      font=DEFAULT_FONT, 
+                      key='-ADD DESC-')]
     ])
 
     column2 = sg.Column([
-        [sg.Text('View Habits', font=H3_FONT)],
-        [sg.Listbox(enable_events=True, values=habit_dict.keys(), select_mode="LISTBOX_SELECT_MODE_SINGLE", size=(20, 20), font=DEFAULT_FONT, key='-HABIT LIST-')]
+        [sg.Text('View Habits', 
+                 font=H3_FONT)],
+        [sg.Listbox(enable_events=True, 
+                    values=habit_dict.keys(), 
+                    select_mode="LISTBOX_SELECT_MODE_SINGLE", 
+                    size=(20, 20), 
+                    font=DEFAULT_FONT, 
+                    key='-HABIT LIST-')]
     ])
 
     selected_column = sg.Column([
         [
-            sg.Text('Selected Habit', font=H3_FONT), 
-            sg.Push(), sg.ButtonMenu('⋮', habit_menu, font=BUTTON_FONT, button_color=('#000000', '#A8CFDD'), border_width=0, key='-HABIT OPTIONS-')
+            sg.Text('Selected Habit', 
+                    font=H3_FONT), 
+            sg.Push(), 
+            sg.ButtonMenu('⋮', 
+                          habit_menu, 
+                          font=BUTTON_FONT, 
+                          button_color=('#000000', '#A8CFDD'), 
+                          border_width=0, 
+                          key='-HABIT OPTIONS-')
         ],
         [sg.Frame('Habit', 
                   layout=[[sg.Text('No Habit Selected', 
@@ -92,7 +113,12 @@ def build_win(habit_dict):# Build the Window initially
                                    key='-VIEW HABIT NAME-')]]
                  )],
 
-        [sg.Frame('Habit Description', layout=[[sg.Text('No Habit Selected', font=DEFAULT_FONT, size=(28, 20), key='-VIEW DESC-')]])]
+        [sg.Frame('Habit Description', 
+                  layout=[[sg.Text('No Habit Selected', 
+                                   font=DEFAULT_FONT, 
+                                   size=(28, 20), 
+                                   key='-VIEW DESC-')]]
+                 )]
     ])
 
     streak_column = sg.Column([
@@ -133,33 +159,30 @@ def build_win(habit_dict):# Build the Window initially
 
     ], visible=False, key='-EDITING COLUMN-')
 
-    top_bar = sg.Column([
-        [
+    top_bar = [
             sg.Text("StreakIt", 
                     font=H1_FONT, 
-                    background_color='black'), 
-
+                    expand_x=True), 
             sg.Text('A HABIT TRACKING APP', 
                     pad=(50, 0), 
-                    font=H4_FONT), 
-
-            sg.Push(background_color='orange'), 
-
+                    font=H4_FONT,
+                    expand_x=True), 
+            sg.Push(), 
             sg.Button('HOME', 
                       disabled=True, 
-                      pad=(20, 0), 
-                      key='-HOME-'), 
-                      
+                      pad=(8, 0),
+                      expand_x=True, 
+                      key='-HOME-'),    
             sg.Button('OPTIONS', 
                       disabled=False, 
-                      pad=(20, 0), 
+                      pad=(20, 0),
+                      expand_x=True, 
                       key='-OPTIONS-')
         ]
-    ], expand_x=True, background_color='gray')
 
     layout = [
-        [sg.pin(top_bar)],
-        [sg.HSeparator()]
+        [top_bar],
+        [sg.HSeparator()],
         [
             sg.pin(sg.Column(layout=[
                 [
@@ -169,17 +192,19 @@ def build_win(habit_dict):# Build the Window initially
                     sg.VSeparator(), 
                     sg.pin(sg.Column(layout=[[selected_column, streak_column]], 
                                      key='-SELECTED HABIT COLUMN-')), 
-                    sg.pin(editing_column), 
-                    sg.VSeparator()
+                    sg.pin(editing_column)
                 ]]))
         ]
     ]
     return sg.Window('Habit Tracker', 
-                     layout, border_depth=1, 
+                     layout, 
+                     border_depth=1, 
                      finalize=True, 
                      size=(WIN_LENGTH, WIN_HEIGHT))
 
-def update_win(window, habit_dict, selected_habit):
+def update_win(window, 
+               habit_dict, 
+               selected_habit):
     """
     Updates the window text values constantly
 
