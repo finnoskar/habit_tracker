@@ -89,6 +89,7 @@ def main():
                 window['-EDITING COLUMN-'].update(visible=False)
             else:
                 sg.popup('Select a habit to delete', keep_on_top=True)
+        window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
     
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt

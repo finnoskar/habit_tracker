@@ -130,13 +130,19 @@ def build_win(habit_dict):# Build the Window initially
         [sg.Frame('Streak', 
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
-                                   size=700, 
+                                   size=133, 
                                    key='-VIEW STREAK-')]]
                  )],
+        [sg.ProgressBar(orientation='vertical',
+                        border_width=2,
+                        max_value=7, 
+                        size=(8, 106),
+                        bar_color=('green', '#A8CFDD'), 
+                        key='-PROGRESS-')],
         [sg.Frame('Good Work Bit', 
                   layout=[[sg.Text('Yup', 
                                    font=H3_FONT)]], 
-                  size=(300, 700))],
+                  size=(115, 133))],
     ])
 
     editing_column = sg.Column([
@@ -161,10 +167,11 @@ def build_win(habit_dict):# Build the Window initially
 
     top_bar = [
             sg.Text("StreakIt", 
-                    font=H1_FONT, 
+                    font=H1_FONT,
+                    pad=((15, 0), (0, 0)), 
                     expand_x=True), 
             sg.Text('A HABIT TRACKING APP', 
-                    pad=(50, 0), 
+                    pad=(30, 0), 
                     font=H4_FONT,
                     expand_x=True), 
             sg.Push(), 
