@@ -89,6 +89,18 @@ def main():
                 window['-EDITING COLUMN-'].update(visible=False)
             else:
                 sg.popup('Select a habit to delete', keep_on_top=True)
+        elif event == '-OPTIONS-':
+            window['-HOME-'].update(disabled=False)
+            window[event].update(disabled=True)
+            window['-HOME PAGE-'].update(visible=False)
+            window['-OPTIONS PAGE-'].update(visible=True)
+        elif event == '-HOME-':
+            window['-OPTIONS-'].update(disabled=False)
+            window[event].update(disabled=True)
+            window['-HOME PAGE-'].update(visible=True)
+            window['-OPTIONS PAGE-'].update(visible=False)
+            print('home')
+
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
     

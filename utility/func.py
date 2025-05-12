@@ -62,9 +62,14 @@ def build_win(habit_dict):# Build the Window initially
     H4_FONT = ('Calibri', 14)
     BUTTON_FONT = ('Calibri', 12)
     DEFAULT_FONT = ('Calibri', 9)
+    
+    THEMES = ('LightBlue3', 'LightGrey1', 'Reds')
+    DEFAULT_THEME = 'LightBlue3'
+
     habit_menu = [
         '⋮', ['&Delete', '&Edit', '&Clear Streak']
     ]
+
     column1 = sg.Column([
         [
             sg.Text('Add Habit', 
@@ -186,22 +191,29 @@ def build_win(habit_dict):# Build the Window initially
                       expand_x=True, 
                       key='-OPTIONS-')
         ]
+    
+    options_page = sg.Column([
+        [
+            sg.Push(background_color='orange')
+        ],
+    ], expand_x=True, visible=False, key='-OPTIONS PAGE-')
 
     layout = [
         [top_bar],
         [sg.HSeparator()],
-        [
-            sg.pin(sg.Column(layout=[
-                [
-                    sg.pin(column1), 
-                    sg.VSeparator(), 
-                    sg.pin(column2), 
-                    sg.VSeparator(), 
-                    sg.pin(sg.Column(layout=[[selected_column, streak_column]], 
-                                     key='-SELECTED HABIT COLUMN-')), 
-                    sg.pin(editing_column)
-                ]]))
-        ]
+        [sg.pin(sg.Column([[
+                        sg.pin(sg.Column(layout=[
+                            [
+                                sg.pin(column1), 
+                                sg.VSeparator(), 
+                                sg.pin(column2), 
+                                sg.VSeparator(), 
+                                sg.pin(sg.Column(layout=[[selected_column, streak_column]], 
+                                                key='-SELECTED HABIT COLUMN-')), 
+                                sg.pin(editing_column)
+                            ]]))
+                        ]], key='-HOME PAGE-'))],
+        [sg.pin(options_page)]
     ]
     return sg.Window('Habit Tracker', 
                      layout, 
