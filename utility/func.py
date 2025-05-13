@@ -45,12 +45,12 @@ def load_habits(habit_dict):# task at beginning
 
 def build_list_right_click_menu(habit_dict):
     list_right_click_menu = []
-    inner_menu = ['&Delete', '&Edit', '&Clear Streak']
+    inner_template = ['&Delete', '&Edit', '&Clear Streak']
     for habit in habit_dict.keys(): # [A, B, C, F]
-        this_inner_menu = inner_menu # [D, E, CS]
-        for item in this_inner_menu: # [D, E, CS]
-            this_inner_menu[this_inner_menu.index(item)] += ' ' + habit   # 
-        list_right_click_menu += [habit, this_inner_menu]
+        inner_menu = inner_template # [D, E, CS]
+        for item in inner_template: # [D, E, CS]
+            inner_menu.append(f'{item} {habit}')
+        list_right_click_menu += [habit, inner_menu]
     
     list_right_click_menu = [''] + [list_right_click_menu]
     return list_right_click_menu
