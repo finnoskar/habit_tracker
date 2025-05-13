@@ -20,6 +20,7 @@ def main():
     func.load_habits(habit_data.habit_dict)# Load tasks from file, save into habit_data.habit_dict
     print('is it working')
     window = func.build_win(habit_data.habit_dict) # Build and return the Window object (GUI)
+    print('help please. this before selected habit')
     selected_habit = 'No Habit Selected' # The default habit; gives context
     print('loop next')
     while True:
