@@ -43,6 +43,18 @@ def load_habits(habit_dict):# task at beginning
                     prevdate = None
                 habit_dict[habit] = [desc, int(count), prevdate]
 
+def build_list_right_click_menu(habit_dict):
+    list_right_click_menu = []
+    inner_menu = ['&Delete', '&Edit', '&Clear Streak']
+    for habit in habit_dict.keys(): # [A, B, C, F]
+        this_inner_menu = inner_menu # [D, E, CS]
+        for item in this_inner_menu: # [D, E, CS]
+            this_inner_menu[this_inner_menu.index(item)] += ' ' + habit   # 
+        list_right_click_menu += [habit, this_inner_menu]
+    
+    list_right_click_menu = [''] + [list_right_click_menu]
+    return list_right_click_menu
+
 def build_win(habit_dict):# Build the Window initially
     """
     Builds the layout of the GUI and returns the Window object in question.
@@ -67,8 +79,12 @@ def build_win(habit_dict):# Build the Window initially
     DEFAULT_THEME = 'LightBlue3'
 
     habit_menu = [
-        '⋮', ['&Delete', '&Edit', '&Clear Streak']
+        '⋮', ['&Delete', '&Edit', '&Clear Streak'] # the layout for 
     ]
+    right_click_habit_menu = [
+        '', ['&Delete', '&Edit', '&Clear Streak']
+    ]
+    list_right_click_menu = build_list_right_click_menu(habit_dict)
 
     column1 = sg.Column([
         [
@@ -90,19 +106,22 @@ def build_win(habit_dict):# Build the Window initially
 
     column2 = sg.Column([
         [sg.Text('View Habits', 
-                 font=H3_FONT)],
+                 font=H3_FONT,
+                 right_click_menu=right_click_habit_menu)],
         [sg.Listbox(enable_events=True, 
                     values=habit_dict.keys(), 
                     select_mode="LISTBOX_SELECT_MODE_SINGLE", 
                     size=(20, 20), 
-                    font=DEFAULT_FONT, 
+                    font=DEFAULT_FONT,
+                    right_click_menu=list_right_click_menu, 
                     key='-HABIT LIST-')]
-    ])
+    ], right_click_menu=right_click_habit_menu)
 
     selected_column = sg.Column([
         [
             sg.Text('Selected Habit', 
-                    font=H3_FONT), 
+                    font=H3_FONT,
+                   right_click_menu=right_click_habit_menu),
             sg.Push(), 
             sg.ButtonMenu('⋮', 
                           habit_menu, 
@@ -115,40 +134,46 @@ def build_win(habit_dict):# Build the Window initially
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
                                    size=28, 
-                                   key='-VIEW HABIT NAME-')]]
+                                   key='-VIEW HABIT NAME-')]],
+                  right_click_menu=right_click_habit_menu
                  )],
 
         [sg.Frame('Habit Description', 
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
                                    size=(28, 20), 
-                                   key='-VIEW DESC-')]]
+                                   key='-VIEW DESC-')]],
+                  right_click_menu=right_click_habit_menu
                  )]
-    ])
+    ], right_click_menu=right_click_habit_menu)
 
     streak_column = sg.Column([
         [sg.Button('Mark as Done', 
                    enable_events=True, 
                    size=20, 
-                   font=BUTTON_FONT, 
+                   font=BUTTON_FONT,
+                   right_click_menu=right_click_habit_menu, 
                    key='-INC STREAK-')],
         [sg.Frame('Streak', 
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
                                    size=133, 
-                                   key='-VIEW STREAK-')]]
+                                   key='-VIEW STREAK-')]],
+                  right_click_menu=right_click_habit_menu
                  )],
         [sg.ProgressBar(orientation='vertical',
                         border_width=2,
                         max_value=7, 
                         size=(8, 106),
-                        bar_color=('green', '#A8CFDD'), 
+                        bar_color=('green', '#A8CFDD'),
+                        right_click_menu=right_click_habit_menu, 
                         key='-PROGRESS-')],
         [sg.Frame('Good Work Bit', 
                   layout=[[sg.Text('Yup', 
                                    font=H3_FONT)]], 
-                  size=(115, 133))],
-    ])
+                  size=(115, 133),
+                  right_click_menu=right_click_habit_menu)]
+    ], right_click_menu=right_click_habit_menu)
 
     editing_column = sg.Column([
         [

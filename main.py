@@ -100,7 +100,8 @@ def main():
             window['-HOME PAGE-'].update(visible=True)
             window['-OPTIONS PAGE-'].update(visible=False)
             print('home')
-
+        elif event == '&Delete':
+            print()
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
     
