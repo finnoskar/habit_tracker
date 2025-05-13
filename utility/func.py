@@ -4,6 +4,10 @@ Page used to store functions for main.py
 load_habits(habit_dict)
 -- Loads habits from data.txt file and writes them to habit_dict
 
+build_list_right_click_menu(habit_dict)
+-- Builds the menu for the listbox right click menu given the habits in the listbox
+-- return the menu layout
+
 build_win(habit_dict)
 -- Builds the GUI layout
 -- returns the Window object of the GUI
