@@ -51,7 +51,7 @@ def build_list_right_click_menu(habit_dict):
     list_right_click_menu = []
     inner_template = ['&Delete', '&Edit', '&Clear Streak']
     for habit in habit_dict.keys(): # [A, B, C, F]
-        inner_menu = inner_template # [D, E, CS]
+        inner_menu = [] # [D, E, CS]
         for item in inner_template: # [D, E, CS]
             inner_menu.append(f'{item} {habit}')
         list_right_click_menu += [habit, inner_menu]
@@ -250,6 +250,7 @@ def build_win(habit_dict):# Build the Window initially
                      finalize=True, 
                      size=(WIN_LENGTH, WIN_HEIGHT))
 
+
 def update_win(window, 
                habit_dict, 
                selected_habit):
@@ -263,7 +264,9 @@ def update_win(window,
     
     Updates the listbox and habit text values so it reflects the habit data properly
     """
-    window['-HABIT LIST-'].update(habit_dict.keys())
+    list_right_click_menu = build_list_right_click_menu(habit_dict)
+    window['-HABIT LIST-'].set_right_click_menu(list_right_click_menu)
+    window['-HABIT LIST-'].update(values=habit_dict.keys())
     window['-VIEW HABIT NAME-'].update(selected_habit)
     if selected_habit != 'No Habit Selected':
         window['-VIEW DESC-'].update(habit_dict[selected_habit][0])

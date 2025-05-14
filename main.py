@@ -16,17 +16,11 @@ import re
 def main():
     """The Main Process Function"""
     sg.theme('LightBlue3')
-    print('after sg.theme()')
     habit_data = Habits() # Instantiate habit_data
-    print('after Habits()')
     func.load_habits(habit_data.habit_dict)# Load tasks from file, save into habit_data.habit_dict
-    print('is it working')
     window = func.build_win(habit_data.habit_dict) # Build and return the Window object (GUI)
-    print('help please. this before selected habit')
     selected_habit = 'No Habit Selected' # The default habit; gives context
-    print('loop next')
     while True:
-        print('f')
         event, values = window.read()# Get events and values
         if event == sg.WIN_CLOSED:# If the window is closed, break the loop
             break
@@ -106,11 +100,21 @@ def main():
             window['-HOME PAGE-'].update(visible=True)
             window['-OPTIONS PAGE-'].update(visible=False)
             print('home')
-        elif event == '&Delete':
-            print()
+        elif 'Delete ' in event:
+            habit_data.del_habit(event.split(' ')[1])
+            selected_habit = 'No Habit Selected'
+            window['-EDIT HABIT NAME-'].update('')
+            window['-EDIT DESC-'].update('')
+            window['-EDITING COLUMN-'].update(visible=False)
+        elif 'Edit ' in event:
+            selected_habit = event.split(' ')[1]
+            window['-EDITING COLUMN-'].update(visible=True)
+            window['-SELECTED HABIT COLUMN-'].update(visible=False)
+            window['-EDIT HABIT NAME-'].update(selected_habit)
+            window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
-    
+
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt
 
 main()
