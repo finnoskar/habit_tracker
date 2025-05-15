@@ -25,6 +25,8 @@ def main():
         if event == sg.WIN_CLOSED:# If the window is closed, break the loop
             break
         elif event == '-HABIT LIST-':# If an element is selected in the Habit List
+            if str(event) == 'None':
+                continue
             if window[event].Values == []:
                 continue
             if isinstance(values[event], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
