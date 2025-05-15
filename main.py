@@ -54,7 +54,7 @@ def main():
                 else:
                     sg.popup('Select a habit to delete', keep_on_top=True)
             if values[event] == 'Clear Streak':
-                pass
+                habit_data.habit_dict[selected_habit][1] = 0
         elif event == '-EDIT HABIT-':
             if selected_habit == 'No Habit Selected':
                 sg.popup('No Habit Selected. \nSelect a habit to edit!', keep_on_top=True)
@@ -101,17 +101,21 @@ def main():
             window['-OPTIONS PAGE-'].update(visible=False)
             print('home')
         elif 'Delete ' in event:
-            habit_data.del_habit(event.split(' ')[1])
+            print(habit_data.habit_dict)
+            habit_data.del_habit(event.split(' ', 1)[1])
             selected_habit = 'No Habit Selected'
             window['-EDIT HABIT NAME-'].update('')
             window['-EDIT DESC-'].update('')
             window['-EDITING COLUMN-'].update(visible=False)
         elif 'Edit ' in event:
-            selected_habit = event.split(' ')[1]
+            selected_habit = event.split(' ', 1)[1]
             window['-EDITING COLUMN-'].update(visible=True)
             window['-SELECTED HABIT COLUMN-'].update(visible=False)
             window['-EDIT HABIT NAME-'].update(selected_habit)
             window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
+        elif 'Clear Streak ' in event:
+            selected_habit = event.split(' ', 2)[2]
+            habit_data.habit_dict[selected_habit][1] = 0
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
 

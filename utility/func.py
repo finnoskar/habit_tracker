@@ -48,16 +48,22 @@ def load_habits(habit_dict):# task at beginning
                 habit_dict[habit] = [desc, int(count), prevdate]
 
 def build_list_right_click_menu(habit_dict):
-    list_right_click_menu = []
-    inner_template = ['&Delete', '&Edit', '&Clear Streak']
-    for habit in habit_dict.keys(): # [A, B, C, F]
-        inner_menu = [] # [D, E, CS]
-        for item in inner_template: # [D, E, CS]
-            inner_menu.append(f'{item} {habit}')
-        list_right_click_menu += [habit, inner_menu]
-    
-    list_right_click_menu = [''] + [list_right_click_menu]
-    return list_right_click_menu
+    """A function to build the right-click menu of the listbox. takes in the habit dictionary, returns the menu layout"""
+    list_right_click_menu = [] # The list the menu will be held in
+    inner_template = ['&Delete', '&Edit', '&Clear Streak'] # The different options
+    print('habit_dict.keys(): ' + str(habit_dict.keys()))
+    if not habit_dict.keys():
+        return ['', ['!EMPTY']]
+    for habit in habit_dict.keys():# For each habit in the dictionary
+        print('they are making the menu')
+        inner_menu = []
+        for item in inner_template: # For each options
+            inner_menu.append(f'{item} {habit}') # Add each option + habit name into a string (menu option)
+        list_right_click_menu += [habit, inner_menu] # Place the [Submenu Title, [Submenu]]
+    # They will be added together as: [Submenu Title1, [Submenu1], Submenu Title 2, [Submenu2]]
+    list_right_click_menu = [''] + [list_right_click_menu] # wrap that in the final layout context: ['unused base string', [menu layout]]
+    print('we got this far')
+    return list_right_click_menu # return the menu layout
 
 def build_win(habit_dict):# Build the Window initially
     """
@@ -69,6 +75,8 @@ def build_win(habit_dict):# Build the Window initially
     Returns:
     window - The Window object that the user interacts with
     """
+    # CONSTANTS
+
     WIN_HEIGHT = 400
     WIN_LENGTH = 800
 
@@ -82,6 +90,8 @@ def build_win(habit_dict):# Build the Window initially
     THEMES = ('LightBlue3', 'LightGrey1', 'Reds')
     DEFAULT_THEME = 'LightBlue3'
 
+    # DIFFERENT MENU LAYOUTS
+
     habit_menu = [
         '⋮', ['&Delete', '&Edit', '&Clear Streak'] # the layout for 
     ]
@@ -90,7 +100,7 @@ def build_win(habit_dict):# Build the Window initially
     ]
     list_right_click_menu = build_list_right_click_menu(habit_dict)
 
-    column1 = sg.Column([
+    view_column = sg.Column([# The column where the GUI to add a habit is held
         [
             sg.Text('Add Habit', 
                     font=H3_FONT), 
@@ -108,7 +118,7 @@ def build_win(habit_dict):# Build the Window initially
                       key='-ADD DESC-')]
     ])
 
-    column2 = sg.Column([
+    listbox_column = sg.Column([ # The column where habits are displayed and selected from a listbox
         [sg.Text('View Habits', 
                  font=H3_FONT,
                  right_click_menu=right_click_habit_menu)],
@@ -121,7 +131,7 @@ def build_win(habit_dict):# Build the Window initially
                     key='-HABIT LIST-')]
     ], right_click_menu=right_click_habit_menu)
 
-    selected_column = sg.Column([
+    selected_column = sg.Column([ # The column that shows the selected habit's details
         [
             sg.Text('Selected Habit', 
                     font=H3_FONT,
@@ -151,7 +161,7 @@ def build_win(habit_dict):# Build the Window initially
                  )]
     ], right_click_menu=right_click_habit_menu)
 
-    streak_column = sg.Column([
+    streak_column = sg.Column([ # The column with the streak data of the selected habit
         [sg.Button('Mark as Done', 
                    enable_events=True, 
                    size=20, 
@@ -179,7 +189,7 @@ def build_win(habit_dict):# Build the Window initially
                   right_click_menu=right_click_habit_menu)]
     ], right_click_menu=right_click_habit_menu)
 
-    editing_column = sg.Column([
+    editing_column = sg.Column([ # The column that appears when the Edit button is pressed (or edit option on right click menus)
         [
             sg.Text('Edit Habit', 
                     font=H3_FONT), 
@@ -199,7 +209,7 @@ def build_win(habit_dict):# Build the Window initially
 
     ], visible=False, key='-EDITING COLUMN-')
 
-    top_bar = [
+    top_bar = [# The top bar, with the header and nav buttons
             sg.Text("StreakIt", 
                     font=H1_FONT,
                     pad=((15, 0), (0, 0)), 
@@ -221,21 +231,21 @@ def build_win(habit_dict):# Build the Window initially
                       key='-OPTIONS-')
         ]
     
-    options_page = sg.Column([
+    options_page = sg.Column([# The page with the options and info about the app
         [
             sg.Push(background_color='orange')
         ],
     ], expand_x=True, visible=False, key='-OPTIONS PAGE-')
 
-    layout = [
+    layout = [# The final layout
         [top_bar],
         [sg.HSeparator()],
         [sg.pin(sg.Column([[
                         sg.pin(sg.Column(layout=[
                             [
-                                sg.pin(column1), 
+                                sg.pin(view_column), 
                                 sg.VSeparator(), 
-                                sg.pin(column2), 
+                                sg.pin(listbox_column), 
                                 sg.VSeparator(), 
                                 sg.pin(sg.Column(layout=[[selected_column, streak_column]], 
                                                 key='-SELECTED HABIT COLUMN-')), 
@@ -264,12 +274,12 @@ def update_win(window,
     
     Updates the listbox and habit text values so it reflects the habit data properly
     """
-    list_right_click_menu = build_list_right_click_menu(habit_dict)
-    window['-HABIT LIST-'].set_right_click_menu(list_right_click_menu)
-    window['-HABIT LIST-'].update(values=habit_dict.keys())
-    window['-VIEW HABIT NAME-'].update(selected_habit)
-    if selected_habit != 'No Habit Selected':
-        window['-VIEW DESC-'].update(habit_dict[selected_habit][0])
+    list_right_click_menu = build_list_right_click_menu(habit_dict) # create the listbox right click menu
+    window['-HABIT LIST-'].set_right_click_menu(list_right_click_menu) # update the listbox right click menu
+    window['-HABIT LIST-'].update(values=habit_dict.keys()) # update the content of the listbox
+    window['-VIEW HABIT NAME-'].update(selected_habit)# update the habit name of the habit in the selected habit text box
+    if selected_habit != 'No Habit Selected': # If there is no habit selected:
+        window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) #
         window['-VIEW STREAK-'].update(habit_dict[selected_habit][1])
     else:
         window['-VIEW DESC-'].update('No Habit Selected')

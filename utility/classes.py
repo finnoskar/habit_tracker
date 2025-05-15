@@ -12,7 +12,13 @@ class Habits:
         self.habit_dict = {} # define the dict
         self.UNACCEPTED_CHARS = re.compile(r'[^a-zA-Z0-9!$%()\-=+?\/\'":;,. \r?\n]')
     
-    def add_habit(self, new_habit, desc):# adding a habit to the Habit_matrix
+    def add_habit(self, new_habit, desc):
+        """
+        METHOD to add a habit to the habit dictionary
+        PARAMS
+        new_habit
+        -- 
+        """
         count = 0
         new_habit = new_habit.lower().strip()
         if not new_habit:
@@ -24,6 +30,9 @@ class Habits:
         if len(new_habit) > 25: # Habit name too long (>15 characters)
             sg.popup(f'Habit {new_habit} too long. \nMust have 4-25 characters', keep_on_top=True)
             return 'THROW_HABIT_TOO_LONG'
+        if new_habit == 'no habit selected':
+            sg.popup(f'Habit {new_habit} illegal. Try again.', keep_on_top=True)
+            return 'THROW_ILLEGAL_NAME'
         if new_habit not in self.habit_dict.keys():# If it is not present in the habit_dict
             if re.search(self.UNACCEPTED_CHARS, new_habit + desc):# If the regex of unaccepted characters matches the habit_name or the description
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit + desc)# get a list of those characters
@@ -49,6 +58,9 @@ class Habits:
                 return habit
             if len(new_habit_name) > 25:# If the name is too long
                 sg.popup(f'Habit name "{new_habit_name}" too long. \nMust have 4-25 characters', keep_on_top=True)
+                return habit
+            if new_habit_name == 'no habit selected':
+                sg.popup(f'Habit name {new_habit_name} illegal. Try again', keep_on_top=True)
                 return habit
             if re.search(self.UNACCEPTED_CHARS, new_habit_name + desc):# If the regex of unaccepted characters matches the habit_name or the description
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit_name + desc)# get a list of those characters
