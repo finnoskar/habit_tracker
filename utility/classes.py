@@ -20,7 +20,7 @@ class Habits:
         -- 
         """
         count = 0
-        new_habit = new_habit.lower().strip()
+        new_habit = new_habit.strip()
         if not new_habit:
             sg.popup('No habit input. Please add a habit name', keep_on_top=True)
             return 'THROW_NO_HABIT_NAME'
@@ -33,15 +33,16 @@ class Habits:
         if new_habit == 'no habit selected':
             sg.popup(f'Habit {new_habit} illegal. Try again.', keep_on_top=True)
             return 'THROW_ILLEGAL_NAME'
-        if new_habit not in self.habit_dict.keys():# If it is not present in the habit_dict
+        lowered_keys = [list(self.habit_dict.keys())[i].lower() for i in range(len(self.habit_dict))]
+        if new_habit.lower() not in lowered_keys:# If it is not present in the habit_dict (checking as lower case to remove case duplicates)
             if re.search(self.UNACCEPTED_CHARS, new_habit + desc):# If the regex of unaccepted characters matches the habit_name or the description
                 list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit + desc)# get a list of those characters
                 list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
-                unaccepted_chars_message = 'Uh oh! Your habit nam and/or description contains unsupported characters!\nThe characters in question are:\n' # base error message for unaccepted chars
+                unaccepted_chars_message = 'Uh oh! Your habit name and/or description contains unsupported characters!\nThe characters in question are:\n "' # base error message for unaccepted chars
                 unaccepted_chars_message += list_of_unaccepted_chars.pop(0) # remove the first item of the unaccepted chars and add to the message: this is to ensure char, char, char, not , char, char, char
                 for char in list_of_unaccepted_chars:
                     unaccepted_chars_message += ', ' + char# add every other char to the list as ', char'
-                sg.popup(unaccepted_chars_message, keep_on_top=True)
+                sg.popup(unaccepted_chars_message + '"', keep_on_top=True)
                 return 'THROW_UNACCEPTED_CHARS'
             else:
                 self.habit_dict[new_habit] = [desc, count, None]
@@ -50,7 +51,7 @@ class Habits:
             sg.popup(f'Habit "{new_habit}" already in system. Edit habit data to change existing ')
     
     def update_habit(self, habit, new_habit_name, desc):# update the stuff about a habit
-            new_habit_name = new_habit_name.lower().strip()
+            new_habit_name = new_habit_name.strip()
             count = self.habit_dict[habit][1] # keep the count the same, because otherwise this can be farmed.
             prevdate = self.habit_dict[habit][2] # prevdate is same, because I'm not letting people exploit this
             if len(new_habit_name) < 4:# If the name is too short
@@ -69,20 +70,20 @@ class Habits:
                 unaccepted_chars_message += list_of_unaccepted_chars.pop(0) # remove the first item of the unaccepted chars and add to the message: this is to ensure char, char, char, not , char, char, char
                 for char in list_of_unaccepted_chars:
                     unaccepted_chars_message += ', ' + char # Add every other character to the list as ', <char>'
-                sg.popup(unaccepted_chars_message, keep_on_top=True)
+                sg.popup(unaccepted_chars_message + '"', keep_on_top=True)
                 return habit
-            new_habit_name = new_habit_name.lower().strip()
             desc = desc.strip()
             self.habit_dict.pop(habit) # remove the old habit
-            if new_habit_name in self.habit_dict:
-                sg.popup(f'Habit name "{new_habit_name}" is already taken.\nChoose a new name')
+            lowered_keys = [list(self.habit_dict.keys())[i].lower() for i in range(len(self.habit_dict))]
+            if new_habit_name.lower() in lowered_keys:
+                sg.popup(f'Habit name "{new_habit_name}" is already in system.\nChoose a new name')
                 self.habit_dict[habit] = [desc, count, prevdate] # Add the new info under the old habit_name
                 return habit
             self.habit_dict[new_habit_name] = [desc, count, prevdate] # fill into habit_dict as in {habit: [desc, count, prevdate]}
             return new_habit_name # Return the new name so selected_habit works
                 
     def inc_habit(self, habit):# Increment the usage of a habit
-        habit = habit.lower().strip()
+        habit = habit.strip()
         if habit in self.habit_dict.keys():
             if self.habit_dict[habit][2] == None:# If the last done date is None (just initialized)
                 self.habit_dict[habit][1] = 1# Set streak to one
@@ -92,14 +93,14 @@ class Habits:
                 if end_streak_date < datetime.date.today():
                     self.habit_dict[habit][1] = 1 # make streak 1: resetted
                     self.habit_dict[habit][2] = datetime.date.today()# add last time was streaked
-                    sg.popup('Oh NO! You lost your streak for this habit!\nNext time, make sure you mark this as done EVERY DAY!\nCheers!', keep_on_top=True)
+                    sg.popup('You lost your streak for this habit!\nNext time, make sure you mark this as done every day in order to maintain your streak', keep_on_top=True)
                 else:
                     self.habit_dict[habit][1] += 1 # increment streak
                     self.habit_dict[habit][2] = datetime.date.today()
     
 
     def del_habit(self, habit):
-        habit = habit.lower().strip()
+        habit = habit.strip()
         self.habit_dict.pop(habit)
 
 

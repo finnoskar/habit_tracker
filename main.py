@@ -81,7 +81,7 @@ def main():
                     habit_data.inc_habit(selected_habit)
                     habit_data.habit_dict[selected_habit][2] = datetime.date.today()
                 else:
-                    sg.popup('Yuu have already marked this habit as done today! \nWait till tomorrow to increase your streak and gain more points!', keep_on_top=True)
+                    sg.popup('You have already marked this habit as done today! \nWait till tomorrow to increase your streak!', keep_on_top=True)
         elif event == '-DEL HABIT-':
             if selected_habit != 'No Habit Selected':
                 habit_data.del_habit(selected_habit)
@@ -119,7 +119,7 @@ def main():
             selected_habit = event.split(' ', 2)[2]
             habit_data.habit_dict[selected_habit][1] = 0
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
-        func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
+        func.update_win(window, values, habit_data.UNACCEPTED_CHARS, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
 
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt
 
