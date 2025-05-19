@@ -113,9 +113,11 @@ def build_win(habit_dict):# Build the Window initially
         ],
         [sg.Input(size=(35, 1), 
                   font=DEFAULT_FONT, 
+                  enable_events=True,
                   key='-ADD HABIT NAME-')],
         [sg.Multiline(size=(33, 20), 
-                      font=DEFAULT_FONT, 
+                      font=DEFAULT_FONT,
+                      enable_events=True,
                       key='-ADD DESC-')]
     ])
 
@@ -202,10 +204,12 @@ def build_win(habit_dict):# Build the Window initially
         ],
         [sg.Input(size=(35, 1), 
                   font=DEFAULT_FONT, 
+                  enable_events=True,
                   key='-EDIT HABIT NAME-')],
 
         [sg.Multiline(size=(33, 20), 
                       font=DEFAULT_FONT, 
+                      enable_events=True,
                       key='-EDIT DESC-')]
 
     ], visible=False, key='-EDITING COLUMN-')
@@ -262,26 +266,24 @@ def build_win(habit_dict):# Build the Window initially
                      size=(WIN_LENGTH, WIN_HEIGHT))
 
 
-def filter_input(name,
-                 desc,
+def filter_input(window,
+                 values,
+                 input_key,
                  UNACCEPTED_CHARS):
-    if name + desc == '':
+    input_text = values[input_key]
+    if input_text == '':
         return ('', '')
-    name_unaccepted = re.findall(UNACCEPTED_CHARS, name)
-    desc_unaccepted = re.findall(UNACCEPTED_CHARS, desc)
-    texts = {name: name_unaccepted, desc: desc_unaccepted}
-    filtered_texts = []
-    for text in texts:
-        for char in text:
-            if char in texts[text]:
-                text.remove(char)
-        filtered_texts.append(text)
-    print(filtered_texts)
-    return filtered_texts
+    input_unaccepted = re.findall(UNACCEPTED_CHARS, input_text)
+    input_text = list(input_text)
+    for char in input_text:
+        if char in input_unaccepted:
+            input_text.remove(char)
+    filtered_text = ''.join(input_text)
+    window[input_key].update(filtered_text)
+    return filtered_text
+
 
 def update_win(window, 
-               values,
-               UNACCEPTED_CHARS,
                habit_dict, 
                selected_habit):
     """
@@ -295,9 +297,6 @@ def update_win(window,
     Updates the listbox and habit text values so it reflects the habit data properly
     """
     list_right_click_menu = build_list_right_click_menu(habit_dict) # create the listbox right click menu
-    new_name, new_desc = filter_input(values['-ADD HABIT NAME-'], values['-ADD DESC-'], UNACCEPTED_CHARS)
-    window['-ADD HABIT NAME-'].update(new_name)
-    window['-ADD DESC-'].update(new_desc)
     window['-HABIT LIST-'].set_right_click_menu(list_right_click_menu) # update the listbox right click menu
     window['-HABIT LIST-'].update(values=habit_dict.keys()) # update the content of the listbox
     window['-VIEW HABIT NAME-'].update(selected_habit)# update the habit name of the habit in the selected habit text box

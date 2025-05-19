@@ -25,11 +25,11 @@ def main():
         if event == sg.WIN_CLOSED:# If the window is closed, break the loop
             break
         elif event == '-HABIT LIST-':# If an element is selected in the Habit List
-            if str(event) == 'None':
+            if values[event] == []:
                 continue
             if window[event].Values == []:
                 continue
-            if isinstance(values[event], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
+            elif isinstance(values[event], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
                 selected_habit = values[event][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
         elif event == '-ADD HABIT-':# If you want to add a habit
             add_habit_error = habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict and save the error that is thrown by the function as add_habit_error
@@ -118,8 +118,10 @@ def main():
         elif 'Clear Streak ' in event:
             selected_habit = event.split(' ', 2)[2]
             habit_data.habit_dict[selected_habit][1] = 0
+        elif event in ['-ADD HABIT NAME-', '-ADD DESC-', '-EDIT HABIT NAME-', '-EDIT DESC-']:
+            print(func.filter_input(window, values, event, habit_data.UNACCEPTED_CHARS))
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
-        func.update_win(window, values, habit_data.UNACCEPTED_CHARS, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
+        func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
 
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt
 
