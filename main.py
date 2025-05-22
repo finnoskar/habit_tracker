@@ -28,7 +28,7 @@ def main():
                 continue # end process
             if window[event].Values == []: # if the listbox is empty 
                 continue # end process
-            elif isinstance(values[event], list):# if values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
+            elif isinstance(values[event], list):# If values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
                 selected_habit = values[event][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
         elif event == '-ADD HABIT-':# If you want to add a habit
             add_habit_error = habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict and save the error that is thrown by the function as add_habit_error
@@ -92,13 +92,13 @@ def main():
             window['-EDIT HABIT NAME-'].update('')
             window['-EDIT DESC-'].update('')
             window['-EDITING COLUMN-'].update(visible=False)
-        elif 'Edit ' in event:
+        elif 'Edit ' in event: # IF ERditselected from listbox right click menu (format: 'Edit Habit')
             selected_habit = event.split(' ', 1)[1]
             window['-EDITING COLUMN-'].update(visible=True)
             window['-SELECTED HABIT COLUMN-'].update(visible=False)
             window['-EDIT HABIT NAME-'].update(selected_habit)
             window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
-        elif 'Clear Streak ' in event:
+        elif 'Clear Streak ' in event: # IF  Clear Streak elected from listbox right click menu (format: 'Clear Streak Habit')
             selected_habit = event.split(' ', 2)[2]
             habit_data.habit_dict[selected_habit][1] = 0
         elif event in ['-ADD HABIT NAME-', '-ADD DESC-', '-EDIT HABIT NAME-', '-EDIT DESC-']:

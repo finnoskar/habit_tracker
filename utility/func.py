@@ -48,6 +48,7 @@ def load_habits(habit_dict):# task at beginning
                     prevdate = None
                 habit_dict[habit] = [desc, int(count), prevdate]
 
+
 def build_list_right_click_menu(habit_dict):
     """A function to build the right-click menu of the listbox. takes in the habit dictionary, returns the menu layout"""
     list_right_click_menu = [] # The list the menu will be held in
@@ -65,6 +66,7 @@ def build_list_right_click_menu(habit_dict):
     list_right_click_menu = [''] + [list_right_click_menu] # wrap that in the final layout context: ['unused base string', [menu layout]]
     print('we got this far')
     return list_right_click_menu # return the menu layout
+
 
 def build_win(habit_dict):# Build the Window initially
     """
@@ -270,15 +272,15 @@ def filter_input(window,
                  values,
                  input_key,
                  UNACCEPTED_CHARS):
-    input_text = values[input_key]
-    if input_text == '':
-        return ('', '')
-    input_unaccepted = re.findall(UNACCEPTED_CHARS, input_text)
-    input_text = list(input_text)
+    input_text = values[input_key] # Access the text to be filtered
+    if input_text == '': # If it is empty, return it
+        return input_text
+    input_unaccepted = re.findall(UNACCEPTED_CHARS, input_text) # Find the list of unaccepted chars
+    input_text = list(input_text) # Get the chars in an iterable list
     for char in input_text:
         if char in input_unaccepted:
             input_text.remove(char)
-    filtered_text = ''.join(input_text)
+    filtered_text = ''.join(input_text) # Put the list back into a string
     window[input_key].update(filtered_text)
     return filtered_text
 
