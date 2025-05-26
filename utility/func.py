@@ -276,7 +276,9 @@ def filter_input(window,
     if input_text == '': # If it is empty, return it
         return input_text
     input_unaccepted = re.findall(UNACCEPTED_CHARS, input_text) # Find the list of unaccepted chars
-    input_text = list(input_text) # Get the chars in an iterable list
+    input_text = list(input_text) # Get the chars in an iterable list so 'AB CD' -> ['A', 'B', ' ', 'C', 'D']
+    print(input_text)
+    print('values: ' + str(values[input_key]))
     for char in input_text:
         if char in input_unaccepted:
             input_text.remove(char)

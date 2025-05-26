@@ -102,6 +102,8 @@ def main():
             selected_habit = event.split(' ', 2)[2]
             habit_data.habit_dict[selected_habit][1] = 0
         elif event in ['-ADD HABIT NAME-', '-ADD DESC-', '-EDIT HABIT NAME-', '-EDIT DESC-']:
+            print('values of edit habit:     >' + str(values['-EDIT DESC-']))
+            print(event + ' input stuff: ' + str(values[event]) + ': ' + str(list(values[event])))
             print(func.filter_input(window, values, event, habit_data.UNACCEPTED_CHARS))
         window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
