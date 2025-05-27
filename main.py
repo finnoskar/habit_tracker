@@ -30,6 +30,10 @@ def main():
                 continue # end process
             elif isinstance(values[event], list):# If values[habit list] is a list (if there is anything selected because on the first selection it is an empty string)
                 selected_habit = values[event][0] # selection_mode: single means that only one val will be selected, so vals[listbox] is [x]. finding vals[listbox][0] means we find x in it's original form
+                progress = ((habit_data.habit_dict[selected_habit][1] - 1) % 7) + 1
+                if habit_data.habit_dict[selected_habit][2] == None:
+                    progress = 0
+                window['-PROGRESS-'].update(current_count=progress, bar_color=('#00FF00', '#A8CFDD'))
         elif event == '-ADD HABIT-':# If you want to add a habit
             add_habit_error = habit_data.add_habit(values['-ADD HABIT NAME-'].strip(), values['-ADD DESC-'].strip())# Add that to habit_data.habit_dict and save the error that is thrown by the function as add_habit_error
             print('error:', add_habit_error)
@@ -57,6 +61,7 @@ def main():
             if values[event] == 'Clear Streak': # if the menu option 'Clear Streak' was selected
                 if selected_habit != 'No Habit Selected':
                     habit_data.habit_dict[selected_habit][1] = 0 # set the selected habit streak to 0
+                    window['-PROGRESS-'].update(current_count=0, bar_color=('#00FF00', '#A8CFDD'))
                 else:
                     sg.popup('No Habit Selected', keep_on_top=True)
         elif event == '-UPDATE HABIT-':
@@ -76,6 +81,8 @@ def main():
                     habit_data.habit_dict[selected_habit][2] = datetime.date.today() # Save today as last time marked as done
                 else:
                     sg.popup('You have already marked this habit as done today! \nWait till tomorrow to increase your streak!', keep_on_top=True)
+                progress = ((habit_data.habit_dict[selected_habit][1] - 1) % 7) + 1
+                window['-PROGRESS-'].update(current_count=progress, bar_color=('#00FF00', '#A8CFDD'))
         elif event == '-OPTIONS-': # If the options nav button is selected
             window['-HOME-'].update(disabled=False) #        | MAke Home button active and options button inactive
             window['-OPTIONS-'].update(disabled=True)
@@ -101,11 +108,11 @@ def main():
         elif 'Clear Streak ' in event: # IF  Clear Streak elected from listbox right click menu (format: 'Clear Streak Habit')
             selected_habit = event.split(' ', 2)[2]
             habit_data.habit_dict[selected_habit][1] = 0
+            window['-PROGRESS-'].update(current_count=0, bar_color=('#00FF00', '#A8CFDD'))
         elif event in ['-ADD HABIT NAME-', '-ADD DESC-', '-EDIT HABIT NAME-', '-EDIT DESC-']:
             print('values of edit habit:     >' + str(values['-EDIT DESC-']))
             print(event + ' input stuff: ' + str(values[event]) + ': ' + str(list(values[event])))
             print(func.filter_input(window, values, event, habit_data.UNACCEPTED_CHARS))
-        window['-PROGRESS-'].update(current_count=3, bar_color=('#00FF00', '#A8CFDD'))
         func.update_win(window, habit_data.habit_dict, selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
 
     func.save_habits(habit_data.habit_dict)# save habits hack to data.txt

@@ -324,4 +324,4 @@ def save_habits(habit_dict):# save all tasks as rawtext to data.txt params: habi
         for key in habit_dict:# for every key (habit) in the habit_dict (dictionary of vals), get the key
             desc, count, prevdate = habit_dict[key] # separate the habit_dict values (as a list) into description and count of habit
             desc = desc.replace('\n', '||') # replace all newlines with ||: helps not break data, but preserves the newlines. Will be decoded in load_habits
-            data.write(f'{key}>>{desc}^^{count}^^{prevdate}\n')# Save that data in the form "habit>>desc::count", which can be unpacked with split method in load_habits()
+            data.write(f'{key}>>{desc}^^{count}^^{prevdate}\n')# Save that data in the form "habit>>desc^^count^^prevdate", which can be unpacked with split method in load_habits()
