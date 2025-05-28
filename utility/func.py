@@ -96,12 +96,12 @@ def build_win(habit_dict):# Build the Window initially
     # DIFFERENT MENU LAYOUTS
 
     habit_menu = [
-        '⋮', ['&Delete', '&Edit', '&Clear Streak'] # the layout for 
+        '⋮', ['&Delete', '&Edit', '&Clear Streak'] # the layout for the habit options meny
     ]
     right_click_habit_menu = [
-        '', ['&Delete', '&Edit', '&Clear Streak']
+        '', ['&Delete', '&Edit', '&Clear Streak'] # The layout for the right click menu on the view / selected habit column
     ]
-    list_right_click_menu = build_list_right_click_menu(habit_dict)
+    list_right_click_menu = build_list_right_click_menu(habit_dict) # build the list right click menu
 
     view_column = sg.Column([# The column where the GUI to add a habit is held
         [
@@ -231,7 +231,7 @@ def build_win(habit_dict):# Build the Window initially
                       pad=(8, 0),
                       expand_x=True, 
                       key='-HOME-'),    
-            sg.Button('OPTIONS', 
+            sg.Button(' ABOUT ', 
                       disabled=False, 
                       pad=(20, 0),
                       expand_x=True, 
@@ -239,10 +239,15 @@ def build_win(habit_dict):# Build the Window initially
         ]
     
     options_page = sg.Column([# The page with the options and info about the app
-        [
-            sg.Push(background_color='orange')
-        ],
-    ], expand_x=True, visible=False, key='-OPTIONS PAGE-')
+        [sg.Text('Welcome to my Habit Tracking App!', 
+                  font=H3_FONT)],
+        [sg.Text('This is a habit tracking app developed by me for students to use in order to organize themselves for school, home, and other habitual activities.\nHopefully, this will help you to develop useful habits', 
+                  font=DEFAULT_FONT)],
+        [sg.Text('How to Use the App', 
+                  font=H3_FONT)],
+        [sg.Text('Add habits to the system by using the inputs on the left portion of the app and pressing the "Add Habit" button.\nThe habits in the system are displayed in the box to the right. \nUse right click or the small three dots next to the name of the habit selected to Delete, Edit, or Clear the Streak of a habit. \nThe green progress bar on the right is a representative of how many days you have committed to this habit (out of 7, for a week)', 
+                  font=DEFAULT_FONT)]
+], expand_x=True, visible=False, key='-OPTIONS PAGE-')
 
     layout = [# The final layout
         [top_bar],
