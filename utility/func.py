@@ -235,7 +235,7 @@ def build_win(habit_dict):# Build the Window initially
                       disabled=False, 
                       pad=(20, 0),
                       expand_x=True, 
-                      key='-OPTIONS-')
+                      key='-ABOUT-')
         ]
     
     options_page = sg.Column([# The page with the options and info about the app
@@ -247,7 +247,7 @@ def build_win(habit_dict):# Build the Window initially
                   font=H3_FONT)],
         [sg.Text('Add habits to the system by using the inputs on the left portion of the app and pressing the "Add Habit" button.\nThe habits in the system are displayed in the box to the right. \nUse right click or the small three dots next to the name of the habit selected to Delete, Edit, or Clear the Streak of a habit. \nThe green progress bar on the right is a representative of how many days you have committed to this habit (out of 7, for a week)', 
                   font=DEFAULT_FONT)]
-], expand_x=True, visible=False, key='-OPTIONS PAGE-')
+], expand_x=True, visible=False, key='-ABOUT PAGE-')
 
     layout = [# The final layout
         [top_bar],
@@ -274,23 +274,17 @@ def build_win(habit_dict):# Build the Window initially
 
 
 def filter_input(window,
-                 values,
                  input_key,
                  UNACCEPTED_CHARS):
-    input_text = values[input_key] # Access the text to be filtered
+    input_text = window[input_key].get() # Access the text to be filtered
     if input_text == '': # If it is empty, return it
         return input_text
-    input_unaccepted = re.findall(UNACCEPTED_CHARS, input_text) # Find the list of unaccepted chars
-    input_text = list(input_text) # Get the chars in an iterable list so 'AB CD' -> ['A', 'B', ' ', 'C', 'D']
-    print(input_text)
-    print('values: ' + str(values[input_key]))
-    for char in input_text:
-        if char in input_unaccepted:
-            input_text.remove(char)
-    filtered_text = ''.join(input_text) # Put the list back into a string
-    window[input_key].update(filtered_text)
-    return filtered_text
+    
+    filtered_text = re.sub(UNACCEPTED_CHARS, '', input_text)
+    if filtered_text != input_text:
+        window[input_key].update(filtered_text)
 
+    return filtered_text if filtered_text != input_text else input_text
 
 def update_win(window, 
                habit_dict, 
@@ -329,4 +323,4 @@ def save_habits(habit_dict):# save all tasks as rawtext to data.txt params: habi
         for key in habit_dict:# for every key (habit) in the habit_dict (dictionary of vals), get the key
             desc, count, prevdate = habit_dict[key] # separate the habit_dict values (as a list) into description and count of habit
             desc = desc.replace('\n', '||') # replace all newlines with ||: helps not break data, but preserves the newlines. Will be decoded in load_habits
-            data.write(f'{key}>>{desc}^^{count}^^{prevdate}\n')# Save that data in the form "habit>>desc^^count^^prevdate", which can be unpacked with split method in load_habits()
+            data.write(f'{key}>>{desc}^^{count}^^{prevdate}\n')# Save that data in the form "habit>>desc^^count^^prevdate^^progress", which can be unpacked with split method in load_habits()

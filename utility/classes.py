@@ -35,18 +35,8 @@ class Habits:
             return 'THROW_ILLEGAL_NAME'
         lowered_keys = [list(self.habit_dict.keys())[i].lower() for i in range(len(self.habit_dict))]
         if new_habit.lower() not in lowered_keys:# If it is not present in the habit_dict (checking as lower case to remove case duplicates)
-            if re.search(self.UNACCEPTED_CHARS, new_habit + desc):# If the regex of unaccepted characters matches the habit_name or the description
-                list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit + desc)# get a list of those characters
-                list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
-                unaccepted_chars_message = 'Uh oh! Your habit name and/or description contains unsupported characters!\nThe characters in question are:\n "' # base error message for unaccepted chars
-                unaccepted_chars_message += list_of_unaccepted_chars.pop(0) # remove the first item of the unaccepted chars and add to the message: this is to ensure char, char, char, not , char, char, char
-                for char in list_of_unaccepted_chars:
-                    unaccepted_chars_message += ', ' + char# add every other char to the list as ', char'
-                sg.popup(unaccepted_chars_message + '"', keep_on_top=True)
-                return 'THROW_UNACCEPTED_CHARS'
-            else:
-                self.habit_dict[new_habit] = [desc, count, None]
-                return 0
+            self.habit_dict[new_habit] = [desc, count, None]
+            return 0
         else: 
             sg.popup(f'Habit "{new_habit}" already in system. Edit habit data to change existing ')
     
@@ -62,15 +52,6 @@ class Habits:
                 return habit
             if new_habit_name == 'no habit selected':
                 sg.popup(f'Habit name {new_habit_name} illegal. Try again', keep_on_top=True)
-                return habit
-            if re.search(self.UNACCEPTED_CHARS, new_habit_name + desc):# If the regex of unaccepted characters matches the habit_name or the description
-                list_of_unaccepted_chars = re.findall(self.UNACCEPTED_CHARS, new_habit_name + desc)# get a list of those characters
-                list_of_unaccepted_chars = list(set(list_of_unaccepted_chars)) # remove duplicates from the list
-                unaccepted_chars_message = 'Uh oh! Your habit name and/or description contains unsupported characters!\nThe characters in question are:\n' # base error message for unaccepted chars
-                unaccepted_chars_message += list_of_unaccepted_chars.pop(0) # remove the first item of the unaccepted chars and add to the message: this is to ensure char, char, char, not , char, char, char
-                for char in list_of_unaccepted_chars:
-                    unaccepted_chars_message += ', ' + char # Add every other character to the list as ', <char>'
-                sg.popup(unaccepted_chars_message + '"', keep_on_top=True)
                 return habit
             desc = desc.strip()
             self.habit_dict.pop(habit) # remove the old habit
