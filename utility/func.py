@@ -40,13 +40,13 @@ def load_habits(habit_dict):# task at beginning
                 habitinfojoin = line.strip().split(">>") # split the line habit>>info into habit, info vars
                 habit = habitinfojoin[0]
                 info = habitinfojoin[1]
-                desc, count, prevdate = info.split('^^') # split the info (desc^^streak^^prevdate) into vars desc, streak
+                desc, count, prevdate, progress = info.split('^^') # split the info (desc^^streak^^prevdate) into vars desc, streak
                 desc = desc.replace('||', '\n') # turns the saved || into newlines
                 if prevdate != 'None':
                     prevdate = datetime.date.fromisoformat(prevdate)
                 else:
                     prevdate = None
-                habit_dict[habit] = [desc, int(count), prevdate]
+                habit_dict[habit] = [desc, int(count), prevdate, int(progress)]
 
 
 def build_list_right_click_menu(habit_dict):
@@ -321,6 +321,6 @@ def save_habits(habit_dict):# save all tasks as rawtext to data.txt params: habi
     """
     with open('data.txt', 'w') as data: #opening or creating data.txt to save stuff in
         for key in habit_dict:# for every key (habit) in the habit_dict (dictionary of vals), get the key
-            desc, count, prevdate = habit_dict[key] # separate the habit_dict values (as a list) into description and count of habit
+            desc, count, prevdate, progress = habit_dict[key] # separate the habit_dict values (as a list) into description and count of habit
             desc = desc.replace('\n', '||') # replace all newlines with ||: helps not break data, but preserves the newlines. Will be decoded in load_habits
-            data.write(f'{key}>>{desc}^^{count}^^{prevdate}\n')# Save that data in the form "habit>>desc^^count^^prevdate^^progress", which can be unpacked with split method in load_habits()
+            data.write(f'{key}>>{desc}^^{count}^^{prevdate}^^{progress}\n')# Save that data in the form "habit>>desc^^count^^prevdate^^progress", which can be unpacked with split method in load_habits()

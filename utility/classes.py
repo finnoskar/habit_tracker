@@ -20,6 +20,7 @@ class Habits:
         -- 
         """
         count = 0
+        progress = 0
         new_habit = new_habit.strip()
         if not new_habit:
             sg.popup('No habit input. Please add a habit name', keep_on_top=True)
@@ -35,7 +36,7 @@ class Habits:
             return 'THROW_ILLEGAL_NAME'
         lowered_keys = [list(self.habit_dict.keys())[i].lower() for i in range(len(self.habit_dict))]
         if new_habit.lower() not in lowered_keys:# If it is not present in the habit_dict (checking as lower case to remove case duplicates)
-            self.habit_dict[new_habit] = [desc, count, None]
+            self.habit_dict[new_habit] = [desc, count, None, progress]
             return 0
         else: 
             sg.popup(f'Habit "{new_habit}" already in system. Edit habit data to change existing ')
@@ -44,6 +45,7 @@ class Habits:
             new_habit_name = new_habit_name.strip()
             count = self.habit_dict[habit][1] # keep the count the same, because otherwise this can be farmed.
             prevdate = self.habit_dict[habit][2] # prevdate is same, because I'm not letting people exploit this
+            progress = self.habit_dict[3]
             if len(new_habit_name) < 4:# If the name is too short
                 sg.popup(f'Habit name "{new_habit_name}" too short. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
@@ -58,7 +60,7 @@ class Habits:
             lowered_keys = [list(self.habit_dict.keys())[i].lower() for i in range(len(self.habit_dict))]
             if new_habit_name.lower() in lowered_keys:
                 sg.popup(f'Habit name "{new_habit_name}" is already in system.\nChoose a new name')
-                self.habit_dict[habit] = [desc, count, prevdate] # Add the new info under the old habit_name
+                self.habit_dict[habit] = [desc, count, prevdate, progress] # Add the new info under the old habit_name
                 return habit
             self.habit_dict[new_habit_name] = [desc, count, prevdate] # fill into habit_dict as in {habit: [desc, count, prevdate]}
             return new_habit_name # Return the new name so selected_habit works
@@ -69,6 +71,7 @@ class Habits:
             if self.habit_dict[habit][2] == None:# If the last done date is None (just initialized)
                 self.habit_dict[habit][1] = 1# Set streak to one
                 self.habit_dict[habit][2] = datetime.date.today()# Set last done date to today
+                self.habit_dict[habit][3] = 1
             else:
                 end_streak_date = self.habit_dict[habit][2] + datetime.timedelta(days=1)
                 if end_streak_date < datetime.date.today():
@@ -77,6 +80,7 @@ class Habits:
                     sg.popup('You lost your streak for this habit!\nNext time, make sure you mark this as done every day in order to maintain your streak', keep_on_top=True)
                 else:
                     self.habit_dict[habit][1] += 1 # increment streak
+                    self.habit_dict[habit][3] += 1
                     self.habit_dict[habit][2] = datetime.date.today()
     
 
