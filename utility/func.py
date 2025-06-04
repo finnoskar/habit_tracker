@@ -37,9 +37,9 @@ def load_habits(habit_dict):# task at beginning
     if os.path.exists('data.txt'):# if file data.txt
         with open('data.txt', 'r') as data:# opening the file data.txt
             for line in data:# for every line in the task_data
-                habitinfojoin = line.strip().split(">>") # split the line habit>>info into habit, info vars
-                habit = habitinfojoin[0]
-                info = habitinfojoin[1]
+                habitandinfo = line.split(">>") # split the line habit>>info into [habit, info]
+                habit = habitandinfo[0]
+                info = habitandinfo[1]
                 desc, count, prevdate, progress = info.split('^^') # split the info (desc^^streak^^prevdate^^progress) into vars desc, streak, prevdate, progress
                 desc = desc.replace('||', '\n') # turns the saved || into newlines
                 if prevdate != 'None':
@@ -328,7 +328,7 @@ def save_habits(habit_dict):# save all tasks as rawtext to data.txt params: habi
     habit_dict --- the habit dictionary that stores the habit_data
     """
     with open('data.txt', 'w') as data: #opening or creating data.txt to save stuff in
-        for key in habit_dict:# for every key (habit) in the habit_dict (dictionary of vals), get the key
-            desc, count, prevdate, progress = habit_dict[key] # separate the habit_dict values (as a list) into description and count of habit
+        for habit in habit_dict:# for every habit in the habit_dict (dictionary of vals), get the key
+            desc, count, prevdate, progress = habit_dict[habit] # separate the habit_dict values (as a list) into description and count of habit
             desc = desc.replace('\n', '||') # replace all newlines with ||: helps not break data, but preserves the newlines. Will be decoded in load_habits
-            data.write(f'{key}>>{desc}^^{count}^^{prevdate}^^{progress}\n')# Save that data in the form "habit>>desc^^count^^prevdate^^progress", which can be unpacked with split method in load_habits()
+            data.write(f'{habit}>>{desc}^^{count}^^{prevdate}^^{progress}\n')# Save that data in the form "habit>>desc^^count^^prevdate^^progress", which can be unpacked with split method in load_habits()
