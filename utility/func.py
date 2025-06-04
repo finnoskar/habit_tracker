@@ -40,7 +40,7 @@ def load_habits(habit_dict):# task at beginning
                 habitinfojoin = line.strip().split(">>") # split the line habit>>info into habit, info vars
                 habit = habitinfojoin[0]
                 info = habitinfojoin[1]
-                desc, count, prevdate, progress = info.split('^^') # split the info (desc^^streak^^prevdate) into vars desc, streak
+                desc, count, prevdate, progress = info.split('^^') # split the info (desc^^streak^^prevdate^^progress) into vars desc, streak, prevdate, progress
                 desc = desc.replace('||', '\n') # turns the saved || into newlines
                 if prevdate != 'None':
                     prevdate = datetime.date.fromisoformat(prevdate)
@@ -52,7 +52,7 @@ def load_habits(habit_dict):# task at beginning
 def build_list_right_click_menu(habit_dict):
     """A function to build the right-click menu of the listbox. takes in the habit dictionary, returns the menu layout"""
     list_right_click_menu = [] # The list the menu will be held in
-    inner_template = ['&Delete', '&Edit', '&Clear Streak'] # The different options
+    inner_template = ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak'] # The different options
     print('habit_dict.keys(): ' + str(habit_dict.keys()))
     if not habit_dict.keys():
         return ['', ['!EMPTY']]
@@ -96,10 +96,10 @@ def build_win(habit_dict):# Build the Window initially
     # DIFFERENT MENU LAYOUTS
 
     habit_menu = [
-        '⋮', ['&Delete', '&Edit', '&Clear Streak'] # the layout for the habit options meny
+        '⋮', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak'] # the layout for the habit options meny
     ]
     right_click_habit_menu = [
-        '', ['&Delete', '&Edit', '&Clear Streak'] # The layout for the right click menu on the view / selected habit column
+        '', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak'] # The layout for the right click menu on the view / selected habit column
     ]
     list_right_click_menu = build_list_right_click_menu(habit_dict) # build the list right click menu
 
@@ -187,9 +187,10 @@ def build_win(habit_dict):# Build the Window initially
                         bar_color=('green', '#A8CFDD'),
                         right_click_menu=right_click_habit_menu, 
                         key='-PROGRESS-')],
-        [sg.Frame('Good Work Bit', 
-                  layout=[[sg.Text('Yup', 
-                                   font=H3_FONT)]], 
+        [sg.Frame('', 
+                  layout=[[sg.Text('You are at \n0/7 days of \ncommitment for \nthis habit', 
+                                   font=DEFAULT_FONT, 
+                                   key='-STREAK MESSAGE-')]], 
                   size=(115, 133),
                   right_click_menu=right_click_habit_menu)]
     ], right_click_menu=right_click_habit_menu)
@@ -306,9 +307,16 @@ def update_win(window,
     if selected_habit != 'No Habit Selected': # If there is no habit selected:
         window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) #
         window['-VIEW STREAK-'].update(habit_dict[selected_habit][1])
+        window['-PROGRESS-'].update(current_count=habit_dict[selected_habit][3], 
+                                    bar_color=('#00FF00', '#A8CFDD'))
+        window['-STREAK MESSAGE-'].update(f'You are at \n{habit_dict[selected_habit][3]}/7 days of \ncommitment for \nthis habit')
     else:
         window['-VIEW DESC-'].update('No Habit Selected')
         window['-VIEW STREAK-'].update('No Habit Selected')
+        window['-PROGRESS-'].update(current_count=0, 
+                                    bar_color=('#00FF00', '#A8CFDD'))
+        window['-STREAK MESSAGE-'].update('You are at \n0/7 days of \ncommitment for \nthis habit')
+    
 
 
 def save_habits(habit_dict):# save all tasks as rawtext to data.txt params: habit_dict is Habits.habit_dict, 

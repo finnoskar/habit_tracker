@@ -45,7 +45,7 @@ class Habits:
             new_habit_name = new_habit_name.strip()
             count = self.habit_dict[habit][1] # keep the count the same, because otherwise this can be farmed.
             prevdate = self.habit_dict[habit][2] # prevdate is same, because I'm not letting people exploit this
-            progress = self.habit_dict[3]
+            progress = self.habit_dict[habit][3]
             if len(new_habit_name) < 4:# If the name is too short
                 sg.popup(f'Habit name "{new_habit_name}" too short. \nMust have 4-25 characters', keep_on_top=True)
                 return habit
@@ -62,7 +62,7 @@ class Habits:
                 sg.popup(f'Habit name "{new_habit_name}" is already in system.\nChoose a new name')
                 self.habit_dict[habit] = [desc, count, prevdate, progress] # Add the new info under the old habit_name
                 return habit
-            self.habit_dict[new_habit_name] = [desc, count, prevdate] # fill into habit_dict as in {habit: [desc, count, prevdate]}
+            self.habit_dict[new_habit_name] = [desc, count, prevdate, progress] # fill into habit_dict as in {habit: [desc, count, prevdate, progress]}
             return new_habit_name # Return the new name so selected_habit works
                 
     def inc_habit(self, habit):# Increment the usage of a habit
@@ -80,7 +80,10 @@ class Habits:
                     sg.popup('You lost your streak for this habit!\nNext time, make sure you mark this as done every day in order to maintain your streak', keep_on_top=True)
                 else:
                     self.habit_dict[habit][1] += 1 # increment streak
-                    self.habit_dict[habit][3] += 1
+                    if self.habit_dict[habit][3] == 7:
+                        self.habit_dict[habit][3] = 1
+                    elif self.habit_dict[habit][3] < 7:
+                        self.habit_dict[habit][3] += 1
                     self.habit_dict[habit][2] = datetime.date.today()
     
 
