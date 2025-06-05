@@ -38,8 +38,7 @@ def load_habits(habit_dict):# task at beginning
         with open('data.txt', 'r') as data:# opening the file data.txt
             for line in data:# for every line in the task_data
                 habitandinfo = line.split(">>") # split the line habit>>info into [habit, info]
-                habit = habitandinfo[0]
-                info = habitandinfo[1]
+                habit, info = habitandinfo
                 desc, count, prevdate, progress = info.split('^^') # split the info (desc^^streak^^prevdate^^progress) into vars desc, streak, prevdate, progress
                 desc = desc.replace('||', '\n') # turns the saved || into newlines
                 if prevdate != 'None':
@@ -96,7 +95,7 @@ def build_win(habit_dict):# Build the Window initially
     # DIFFERENT MENU LAYOUTS
 
     habit_menu = [
-        '⋮', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak'] # the layout for the habit options meny
+        '⋮', ['!🗑 Delete', '!🖌 Edit', '!↺ Clear Streak'] # the layout for the habit options meny
     ]
     right_click_habit_menu = [
         '', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak'] # The layout for the right click menu on the view / selected habit column
@@ -305,12 +304,14 @@ def update_win(window,
     window['-HABIT LIST-'].update(values=habit_dict.keys()) # update the content of the listbox
     window['-VIEW HABIT NAME-'].update(selected_habit)# update the habit name of the habit in the selected habit text box
     if selected_habit != 'No Habit Selected': # If there is no habit selected:
+        window['-HABIT OPTIONS-'].update(menu_def=['⋮', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak']])
         window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) #
         window['-VIEW STREAK-'].update(habit_dict[selected_habit][1])
         window['-PROGRESS-'].update(current_count=habit_dict[selected_habit][3], 
                                     bar_color=('#00FF00', '#A8CFDD'))
         window['-STREAK MESSAGE-'].update(f'You are at \n{habit_dict[selected_habit][3]}/7 days of \ncommitment for \nthis habit')
     else:
+        window['-HABIT OPTIONS-'].update(menu_def=['⋮', ['!🗑 Delete', '!🖌 Edit', '!↺ Clear Streak']])
         window['-VIEW DESC-'].update('No Habit Selected')
         window['-VIEW STREAK-'].update('No Habit Selected')
         window['-PROGRESS-'].update(current_count=0, 

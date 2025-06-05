@@ -40,29 +40,21 @@ def main():
                 window['-ADD HABIT NAME-'].update('')
                 window['-ADD DESC-'].update('')
         elif event == '-HABIT OPTIONS-':
-            if values[event] == 'Edit': # If the menu opton 'Edit' was selected
-                if selected_habit == 'No Habit Selected':
-                    sg.popup('No Habit Selected. \nSelect a habit to edit!', keep_on_top=True)
-                else: # make the editing column visible and the view column invisible
-                    window['-EDITING COLUMN-'].update(visible=True)
-                    window['-SELECTED HABIT COLUMN-'].update(visible=False)
-                    window['-EDIT HABIT NAME-'].update(selected_habit)
-                    window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
-            if values[event] == 'Delete': # If the menu option 'Delete' was selected
-                if selected_habit != 'No Habit Selected': # IF there is a habit selected
-                    habit_data.del_habit(selected_habit) 
-                    selected_habit = 'No Habit Selected'  # reset habit
-                    window['-EDIT HABIT NAME-'].update('') 
-                    window['-EDIT DESC-'].update('')
-                    window['-EDITING COLUMN-'].update(visible=False) # hide editing column
-                else:
-                    sg.popup('Select a habit to delete', keep_on_top=True)
-            if values[event] == 'Clear Streak': # if the menu option 'Clear Streak' was selected
-                if selected_habit != 'No Habit Selected':
-                    habit_data.habit_dict[selected_habit][1] = 0 # set the selected habit streak to 0
-                    habit_data.habit_dict[selected_habit][3] = 0
-                else:
-                    sg.popup('No Habit Selected', keep_on_top=True)
+            if values[event] == '🖌 Edit': # If the menu opton 'Edit' was selected
+                window['-EDITING COLUMN-'].update(visible=True)
+                window['-SELECTED HABIT COLUMN-'].update(visible=False)
+                window['-EDIT HABIT NAME-'].update(selected_habit)
+                window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
+            if values[event] == '🗑 Delete': # If the menu option 'Delete' was selected
+                habit_data.del_habit(selected_habit) 
+                selected_habit = 'No Habit Selected'  # reset habit
+                window['-EDIT HABIT NAME-'].update('') 
+                window['-EDIT DESC-'].update('')
+                window['-EDITING COLUMN-'].update(visible=False) # hide editing column
+            if values[event] == '↺ Clear Streak': # if the menu option 'Clear Streak' was selected
+                habit_data.habit_dict[selected_habit][1] = 0 # set the selected habit streak to 0
+                habit_data.habit_dict[selected_habit][3] = 0
+
         elif event == '-UPDATE HABIT-':
             window['-EDITING COLUMN-'].update(visible=False) # Hide editing column
             window['-SELECTED HABIT COLUMN-'].update(visible=True) # Show viewing column
@@ -90,20 +82,20 @@ def main():
             window['-HOME-'].update(disabled=True)        # Make Home button disables
             window['-HOME PAGE-'].update(visible=True)    # Make Home page visible
             window['-ABOUT PAGE-'].update(visible=False)# Make About page invisible
-        elif 'Delete ' in event:# IF delete selected from listbox right click menu (format: 'Delete Habit')
+        elif '🗑 Delete ' in event:# IF delete selected from listbox right click menu (format: 'Delete Habit')
             habit_data.del_habit(event.split(' ', 2)[2]) # Delete habit (access habit by splitting Delete Habit into [Delete, Habit])
             selected_habit = 'No Habit Selected'
             window['-EDIT HABIT NAME-'].update('')
             window['-EDIT DESC-'].update('')
             window['-EDITING COLUMN-'].update(visible=False)
             window['-SELECTED HABIT COLUMN-'].update(visible=True)
-        elif 'Edit ' in event: # IF ERditselected from listbox right click menu (format: 'Edit Habit')
+        elif '🖌 Edit ' in event: # IF ERditselected from listbox right click menu (format: 'Edit Habit')
             selected_habit = event.split(' ', 2)[2]
             window['-EDITING COLUMN-'].update(visible=True)
             window['-SELECTED HABIT COLUMN-'].update(visible=False)
             window['-EDIT HABIT NAME-'].update(selected_habit)
             window['-EDIT DESC-'].update(habit_data.habit_dict[selected_habit][0])
-        elif 'Clear Streak ' in event: # IF  Clear Streak elected from listbox right click menu (format: 'Clear Streak Habit')
+        elif '↺ Clear Streak ' in event: # IF  Clear Streak elected from listbox right click menu (format: 'Clear Streak Habit')
             selected_habit = event.split(' ', 3)[3]
             habit_data.habit_dict[selected_habit][1] = 0
             habit_data.habit_dict[selected_habit][3] = 0
@@ -131,10 +123,10 @@ def main():
             else:
                 sg.popup('No Habit Selected. \nSelect a habit to clear the streak of.', keep_on_top=True)
         elif event in ['-ADD HABIT NAME-', '-ADD DESC-', '-EDIT HABIT NAME-', '-EDIT DESC-']:
-            print(event + ' input stuff: ' + str(values[event]) + ': ' + str(list(values[event])))
             print(func.filter_input(window, 
                                     event, 
                                     habit_data.UNACCEPTED_CHARS))
+        print('event:    ' + event)
         func.update_win(window, 
                         habit_data.habit_dict, 
                         selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
