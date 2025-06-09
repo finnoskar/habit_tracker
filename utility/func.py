@@ -102,7 +102,7 @@ def build_win(habit_dict):# Build the Window initially
     ]
     list_right_click_menu = build_list_right_click_menu(habit_dict) # build the list right click menu
 
-    view_column = sg.Column([# The column where the GUI to add a habit is held
+    add_column = sg.Column([# The column where the GUI to add a habit is held
         [
             sg.Text('Add Habit', 
                     font=H3_FONT), 
@@ -134,27 +134,27 @@ def build_win(habit_dict):# Build the Window initially
                     font=DEFAULT_FONT,
                     right_click_menu=list_right_click_menu, 
                     key='-HABIT LIST-')]
-    ], right_click_menu=begin_right_click_habit_menu,
-       key='-LISTBOX COLUMN-')
+    ])
 
     selected_column = sg.Column([ # The column that shows the selected habit's details
         [
             sg.Text('Selected Habit', 
                     font=H3_FONT,
-                   right_click_menu=begin_right_click_habit_menu,
-                   key='-SELECTED HABIT TEXT-'),
+                    right_click_menu=begin_right_click_habit_menu,
+                    key='-SELECTED HABIT TEXT-'),
             sg.Push(), 
             sg.ButtonMenu('⋮', 
                           habit_menu, 
                           font=BUTTON_FONT, 
                           button_color=('#000000', '#A8CFDD'), 
-                          border_width=0, 
+                          border_width=0,
                           key='-HABIT OPTIONS-')
         ],
         [sg.Frame('Habit', 
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
                                    size=28, 
+                                   right_click_menu=begin_right_click_habit_menu,
                                    key='-VIEW HABIT NAME-')]],
                   right_click_menu=begin_right_click_habit_menu,
                   key='-HABIT FRAME-'
@@ -164,12 +164,12 @@ def build_win(habit_dict):# Build the Window initially
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
                                    size=(28, 20), 
+                                   right_click_menu=begin_right_click_habit_menu,
                                    key='-VIEW DESC-')]],
                   right_click_menu=begin_right_click_habit_menu,
                   key='-HABIT DESC FRAME-'
                  )]
-    ], right_click_menu=begin_right_click_habit_menu,
-       key='-SELECTED COLUMN-')
+    ])
 
     streak_column = sg.Column([ # The column with the streak data of the selected habit
         [sg.Button('Mark as Done', 
@@ -182,6 +182,7 @@ def build_win(habit_dict):# Build the Window initially
                   layout=[[sg.Text('No Habit Selected', 
                                    font=DEFAULT_FONT, 
                                    size=133, 
+                                   right_click_menu=begin_right_click_habit_menu,
                                    key='-VIEW STREAK-')]],
                   right_click_menu=begin_right_click_habit_menu,
                   key='-STREAK FRAME-'
@@ -196,12 +197,12 @@ def build_win(habit_dict):# Build the Window initially
         [sg.Frame('', 
                   layout=[[sg.Text('You are at \n0/7 days of \ncommitment for \nthis habit', 
                                    font=DEFAULT_FONT, 
+                                   right_click_menu=begin_right_click_habit_menu,
                                    key='-STREAK MESSAGE-')]], 
                   size=(115, 133),
                   right_click_menu=begin_right_click_habit_menu,
                   key='-STREAK MESSAGE FRAME-')]
-    ], right_click_menu=begin_right_click_habit_menu,
-       key='-STREAK COLUMN-')
+    ])
 
     editing_column = sg.Column([ # The column that appears when the Edit button is pressed (or edit option on right click menus)
         [
@@ -264,7 +265,7 @@ def build_win(habit_dict):# Build the Window initially
         [sg.pin(sg.Column([[
                         sg.pin(sg.Column(layout=[
                             [
-                                sg.pin(view_column), 
+                                sg.pin(add_column), 
                                 sg.VSeparator(), 
                                 sg.pin(listbox_column), 
                                 sg.VSeparator(), 
@@ -289,11 +290,11 @@ def filter_input(window,
     if input_text == '': # If it is empty, return it
         return input_text
     
-    filtered_text = re.sub(UNACCEPTED_CHARS, '', input_text)
-    if filtered_text != input_text:
-        window[input_key].update(filtered_text)
+    filtered_text = re.sub(UNACCEPTED_CHARS, '', input_text) # remove all the unaccepted characters
+    if filtered_text != input_text: # if we have made changes 
+        window[input_key].update(filtered_text) # update GUI
 
-    return filtered_text if filtered_text != input_text else input_text
+    return filtered_text if filtered_text != input_text else input_text # if we have made changes, return the changed, if we haven't, return the original text
 
 def update_win(window, 
                habit_dict, 
@@ -308,28 +309,30 @@ def update_win(window,
     
     Updates the listbox and habit text values so it reflects the habit data properly
     """
+    ITEMS_WITH_RIGHT_CLICK_MENU = ['-VIEW HABIT TEXT-', '-SELECTED HABIT TEXT-', '-HABIT FRAME-', '-VIEW HABIT NAME-', '-HABIT DESC FRAME-', '-VIEW DESC-', '-INC STREAK-', '-VIEW STREAK-', '-STREAK FRAME-', '-PROGRESS-', '-STREAK MESSAGE FRAME-', '-STREAK MESSAGE-']
     list_right_click_menu = build_list_right_click_menu(habit_dict) # create the listbox right click menu
     window['-HABIT LIST-'].set_right_click_menu(list_right_click_menu) # update the listbox right click menu
     window['-HABIT LIST-'].update(values=habit_dict.keys()) # update the content of the listbox
     window['-VIEW HABIT NAME-'].update(selected_habit)# update the habit name of the habit in the selected habit text box
-    if selected_habit != 'No Habit Selected': # If there is no habit selected:
+    window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) # update description 
+    window['-VIEW STREAK-'].update(habit_dict[selected_habit][1]) # update streak
+    window['-PROGRESS-'].update(current_count=habit_dict[selected_habit][3], 
+                                bar_color=('#00FF00', '#A8CFDD')) # update the progress bar
+    window['-STREAK MESSAGE-'].update(f'You are at \n{habit_dict[selected_habit][3]}/7 days of \ncommitment for \nthis habit')
+    if selected_habit != 'No Habit Selected': # If there is a habit selected:
         window['-HABIT OPTIONS-'].update(menu_definition=['⋮', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak']])
-        for element in ['-LISTBOX COLUMN-', '-VIEW HABIT TEXT-', '-SELECTED COLUMN-', '-SELECTED HABIT TEXT-', '-HABIT FRAME-', '-HABIT DESC FRAME-', '-HABIT OPTIONS-', '-STREAK COLUMN-', '-INC STREAK-', '-STREAK FRAME-', '-PROGRESS-', '-STREAK MESSAGE FRAME-']:
-            window[element].set_right_click_menu(['', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak']])
-        window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) #
-        window['-VIEW STREAK-'].update(habit_dict[selected_habit][1])
-        window['-PROGRESS-'].update(current_count=habit_dict[selected_habit][3], 
-                                    bar_color=('#00FF00', '#A8CFDD'))
-        window['-STREAK MESSAGE-'].update(f'You are at \n{habit_dict[selected_habit][3]}/7 days of \ncommitment for \nthis habit')
-    else:
-        window['-HABIT OPTIONS-'].update(menu_definition=['⋮', ['!🗑 &Delete', '!🖌 &Edit', '!↺ &Clear Streak']])
-        for element in ['-LISTBOX COLUMN-', '-VIEW HABIT TEXT-', '-SELECTED COLUMN-', '-SELECTED HABIT TEXT-', '-HABIT FRAME-', '-HABIT DESC FRAME-', '-HABIT OPTIONS-', '-STREAK COLUMN-', '-INC STREAK-', '-STREAK FRAME-', '-PROGRESS-', '-STREAK MESSAGE FRAME-']:
-            window[element].set_right_click_menu(['', ['!🗑 &Delete', '!🖌 &Edit', '!↺ &Clear Streak']])
+        for element in ITEMS_WITH_RIGHT_CLICK_MENU: # For every element that has a right click menu
+            window[element].set_right_click_menu(['', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak']]) # set the enabled right click menu
+
+    else: # if there isn't a habit selected
+        window['-HABIT OPTIONS-'].update(menu_definition=['⋮', ['!🗑 &Delete', '!🖌 &Edit', '!↺ &Clear Streak']]) # disable the habit options
         window['-VIEW DESC-'].update('No Habit Selected')
         window['-VIEW STREAK-'].update('No Habit Selected')
         window['-PROGRESS-'].update(current_count=0, 
-                                    bar_color=('#00FF00', '#A8CFDD'))
-        window['-STREAK MESSAGE-'].update('You are at \n0/7 days of \ncommitment for \nthis habit')
+                                    bar_color=('#00FF00', '#A8CFDD')) # -------------------->     reset the progress bar 
+        window['-STREAK MESSAGE-'].update('You are at \n0/7 days of \ncommitment for \nthis habit') # and streak message
+        for element in ITEMS_WITH_RIGHT_CLICK_MENU:# For every element that has a right click menu
+            window[element].set_right_click_menu(['', ['!🗑 &Delete', '!🖌 &Edit', '!↺ &Clear Streak']]) # set the disabled right click menu
     
 
 

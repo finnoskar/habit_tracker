@@ -10,8 +10,7 @@ class Habits:
 
     def __init__(self):# intitiate Habits 
         self.habit_dict = {} # define the dict
-        self.UNACCEPTED_CHARS = re.compile(r'[^a-zA-Z0-9!$%()\-=+?\/\'":;,. \r?\n]')
-    
+        self.UNACCEPTED_CHARS = re.compile(r'[^a-zA-Z0-9!$%()\-=+?\/\'":;,. \r?\n]') # a regex that matches a character not in a set that includes all alphanumeric characters, as well as spaces, newlines and other special characters used in writing 
     def add_habit(self, new_habit, desc):
         """
         METHOD to add a habit to the habit dictionary
@@ -67,35 +66,33 @@ class Habits:
                 
     def inc_habit(self, habit):# Increment the usage of a habit
         habit = habit.strip()
-        if habit in self.habit_dict.keys():
-            if self.habit_dict[habit][2] == None:# If the last done date is None (just initialized)
+        if self.habit_dict[habit][2] == None:# If the last done date is None (just initialized)
                 self.habit_dict[habit][1] = 1# Set streak to one
                 self.habit_dict[habit][2] = datetime.date.today()# Set last done date to today
-                self.habit_dict[habit][3] = 1
-            else:
-                end_streak_date = self.habit_dict[habit][2] + datetime.timedelta(days=1)
-                if end_streak_date < datetime.date.today():
-                    self.habit_dict[habit][1] = 1 # make streak 1: resetted
-                    self.habit_dict[habit][2] = datetime.date.today()# add last time was streaked
-                    sg.popup('You lost your streak for this habit!\nNext time, make sure you mark this as done every day in order to maintain your streak', keep_on_top=True)
-                else:
-                    self.habit_dict[habit][1] += 1 # increment streak
-                    if self.habit_dict[habit][3] == 7:
-                        self.habit_dict[habit][3] = 1
-                    elif self.habit_dict[habit][3] < 7:
-                        self.habit_dict[habit][3] += 1
-                    self.habit_dict[habit][2] = datetime.date.today()
+                self.habit_dict[habit][3] = 1 # set progress to one
+        else: # if the habit has been marked as done before
+            end_streak_date = self.habit_dict[habit][2] + datetime.timedelta(days=1)
+            if end_streak_date < datetime.date.today():
+                self.habit_dict[habit][1] = 1 # make streak 1: resetted
+                self.habit_dict[habit][2] = datetime.date.today()# add last time was streaked
+                sg.popup('You lost your streak for this habit!\nNext time, make sure you mark this as done every day in order to maintain your streak', keep_on_top=True)
+            else: 
+                self.habit_dict[habit][1] += 1 # increment streak
+                if self.habit_dict[habit][3] == 7: self.habit_dict[habit][3] = 1 # if progress is 7, loop it back to 1
+                elif self.habit_dict[habit][3] < 7: self.habit_dict[habit][3] += 1 # if it is less than 7, increment progress as normally
+                self.habit_dict[habit][2] = datetime.date.today() # set the 
     
 
-    def del_habit(self, habit):
+    def del_habit(self, habit): # code for deleting a habit
         habit = habit.strip()
         self.habit_dict.pop(habit)
 
 
-    def print_habits(self):# print to the user all of the habits
+    def print_habits(self):# print to the user all of the habits : archaic, but still useful
         print('All habits logged: ')
         for key in self.habit_dict:
             desc = self.habit_dict[key][0]
             count = self.habit_dict[key][1]
             prevdate = self.habit_dict[key][2]
-            print(f'  * Habit; {key} \n   > Description: {desc}\n   > Streak: {count}\n   >Last Done: {prevdate}')
+            progress = self.habit_dict[key][3]
+            print(f'  * Habit; {key} \n   > Description: {desc}\n   > Streak: {count}\n   >Last Done: {prevdate}\n   >Current Progress: {progress}')
