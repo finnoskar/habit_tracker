@@ -282,6 +282,11 @@ def build_win(habit_dict):# Build the Window initially
                      finalize=True, 
                      size=(WIN_LENGTH, WIN_HEIGHT))
 
+def open_editing_column(window, habit, desc):
+    window['-EDITING COLUMN-'].update(visible=True)
+    window['-SELECTED HABIT COLUMN-'].update(visible=False)
+    window['-EDIT HABIT NAME-'].update(habit)
+    window['-EDIT DESC-'].update(desc)
 
 def filter_input(window,
                  input_key,
@@ -314,15 +319,17 @@ def update_win(window,
     window['-HABIT LIST-'].set_right_click_menu(list_right_click_menu) # update the listbox right click menu
     window['-HABIT LIST-'].update(values=habit_dict.keys()) # update the content of the listbox
     window['-VIEW HABIT NAME-'].update(selected_habit)# update the habit name of the habit in the selected habit text box
-    window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) # update description 
-    window['-VIEW STREAK-'].update(habit_dict[selected_habit][1]) # update streak
-    window['-PROGRESS-'].update(current_count=habit_dict[selected_habit][3], 
-                                bar_color=('#00FF00', '#A8CFDD')) # update the progress bar
-    window['-STREAK MESSAGE-'].update(f'You are at \n{habit_dict[selected_habit][3]}/7 days of \ncommitment for \nthis habit')
+    
+    
     if selected_habit != 'No Habit Selected': # If there is a habit selected:
         window['-HABIT OPTIONS-'].update(menu_definition=['⋮', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak']])
         for element in ITEMS_WITH_RIGHT_CLICK_MENU: # For every element that has a right click menu
             window[element].set_right_click_menu(['', ['🗑 &Delete', '🖌 &Edit', '↺ &Clear Streak']]) # set the enabled right click menu
+        window['-VIEW DESC-'].update(habit_dict[selected_habit][0]) # update description 
+        window['-VIEW STREAK-'].update(habit_dict[selected_habit][1]) # update streak
+        window['-STREAK MESSAGE-'].update(f'You are at \n{habit_dict[selected_habit][3]}/7 days of \ncommitment for \nthis habit')
+        window['-PROGRESS-'].update(current_count=habit_dict[selected_habit][3], 
+                                    bar_color=('#00FF00', '#A8CFDD')) # update the progress bar
 
     else: # if there isn't a habit selected
         window['-HABIT OPTIONS-'].update(menu_definition=['⋮', ['!🗑 &Delete', '!🖌 &Edit', '!↺ &Clear Streak']]) # disable the habit options
