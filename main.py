@@ -97,11 +97,10 @@ def main():
             habit_data.clear_streak(selected_habit)
             
         elif event in ['-ADD HABIT NAME-', '-ADD DESC-', '-EDIT HABIT NAME-', '-EDIT DESC-']:
-            print(func.filter_input(window, 
-                                    event, 
-                                    habit_data.UNACCEPTED_CHARS))
+            func.filter_input(window, 
+                              event, 
+                              habit_data.UNACCEPTED_CHARS)
         
-        print('event:    ' + event)
         func.update_win(window, 
                         habit_data.habit_dict, 
                         selected_habit)# fill in window, update constantly to GUI from habit_data.habit_dict
